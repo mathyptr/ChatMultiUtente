@@ -15,20 +15,32 @@ package ChatClientGUI;
 
 import java.io.*;
 import javax.swing.*;
-
-public class CustomOutputStream extends OutputStream {
-        private JTextArea textArea;
-         
-        public CustomOutputStream(JTextArea textArea) {
-            this.textArea = textArea;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.StyledDocument;
+	
+	public class CustomOutputStream extends OutputStream {
+        private JTextPane textPane;
+		       
+        public CustomOutputStream(JTextPane textArea) {
+            this.textPane = textArea;
         }
-         
+       
         @Override
         public void write(int b) throws IOException {
-            // redirects data to the text area
+ /*           // redirects data to the text area
             textArea.append(String.valueOf((char)b));
             // scrolls the text area to the end of data
             textArea.setCaretPosition(textArea.getDocument().getLength());
+            
+        	*/
+        	
+         	 StyledDocument doc = textPane.getStyledDocument();
+            try {
+                    doc.insertString(doc.getLength(), String.valueOf((char)b),doc.getStyle("italic"));
+            } catch (BadLocationException ble) {
+                System.err.println("Couldn't insert initial text into text pane.");
+            }
+       	 
         }
 
         /**
@@ -38,7 +50,14 @@ public class CustomOutputStream extends OutputStream {
          * After having printed such a String, prints a new line.
          **/
         public void println(String string) {
-    	textArea.append(string+"\n");
+        	
+      	 StyledDocument doc = textPane.getStyledDocument();
+         try {
+                 doc.insertString(doc.getLength(), string+"\n",doc.getStyle("italic"));
+         } catch (BadLocationException ble) {
+             System.err.println("Couldn't insert initial text into text pane.");
+         }
+    	
         }
 
 
@@ -48,6 +67,15 @@ public class CustomOutputStream extends OutputStream {
      * attribute of the class).
      **/
     public void print(String string) {
-	textArea.append(string);
+   	 StyledDocument doc = textPane.getStyledDocument();
+     try {
+             doc.insertString(doc.getLength(),string,doc.getStyle("italic"));
+     } catch (BadLocationException ble) {
+         System.err.println("Couldn't insert initial text into text pane.");
+     }
     }
+    
+    
+
+    
 }

@@ -5,11 +5,17 @@ import java.util.StringTokenizer;
  * Classe per l'implementazione di un Thread Client
  * @author Patrissi Mathilde
  */
+
+
 public class ThreadClient extends Thread{
 	BufferedReader inputServer;
 	String result,clientName;
 	boolean endChat=false;
 	CmdUtil command;
+  	DBManager dbchat = null;
+    // insert three new rows
+;
+	
 	java.util.Vector <String> list;
 	/**
 	 * Costruttore della classe ThreadClient
@@ -22,6 +28,7 @@ public ThreadClient (BufferedReader inputServer, String clientName){//viene pass
 	this.clientName=clientName;
 	command= new CmdUtil();
 	list=new 	java.util.Vector <String>(1,1);
+	dbchat=new DBManager();
 }
 
 	/**
@@ -56,15 +63,19 @@ public ThreadClient (BufferedReader inputServer, String clientName){//viene pass
 			endChat = true; //viene settata la variabile a true poiche' l'utente ha digitato il comando di uscita
 			break;
 		case 2: 
-			System.out.println(command.getDataCMD(clientData));
+			//0511 System.out.println(command.getDataCMD(clientData));
+			DataCMD(clientData);
 			break;
 		case 3: 
 			System.out.println(command.getDataCMD(clientData));
 			break;	
 		case 4: //comando list
 			StringTokenizer data= new StringTokenizer(command.getDataCMD(clientData),"|");
+			list.removeAllElements();
 			while(data.hasMoreTokens())
 			list.addElement(data.nextToken());
+			list.addElement("all");			
+//			list.set(list.size()-1, "all");
 			break;
 			
 		default : 
@@ -73,8 +84,22 @@ public ThreadClient (BufferedReader inputServer, String clientName){//viene pass
 		}
 	}
 	
+	
+
+	
+	
+	private void DataCMD(String clientData) {
+		// TODO Auto-generated method stub
+		String data=command.getDataCMD(clientData);
+		System.out.println(data);	
+		 String dest = data.substring(0, data.indexOf(":"));
+		 String mes=data.substring(data.indexOf(":")+1, data.length()-1);
+		 dbchat.insert(clientName, dest, mes);
+
+	}
+
 	public java.util.Vector <String> getList() { 
-		list.set(list.size()-1, "all");
+		
 		return list;
 	}
 }

@@ -22,7 +22,8 @@ public class CmdUtil {
 		int pos=-1;
 		for(int i=0;i<CMD.size();i++) {
 			if(clientData.length()>=CMD.elementAt(i).length()) {
-			 String cmd = clientData.substring(0, CMD.elementAt(i).length());
+			 int cmdLenght=CMD.elementAt(i).length();
+			 String cmd = clientData.substring(0, cmdLenght);
 			 if(cmd.equalsIgnoreCase(CMD.elementAt(i))) {
 			   	pos=i;
 				break;

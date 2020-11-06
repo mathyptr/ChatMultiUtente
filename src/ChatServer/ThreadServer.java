@@ -92,7 +92,7 @@ public class ThreadServer extends Thread{
 		
 		case 2 : //comando data: restiamo nella fase goChat
 			if(status.equalsIgnoreCase("goChat"))
-				Send(clientName + ": "+command.getDataCMD(clientData));
+				Send(command.getDATA_CMD()+clientName + ": "+command.getDataCMD(clientData));
 			else
 					SendMSG("Impossibile iniziare la chat");
 			break;
@@ -168,7 +168,8 @@ public class ThreadServer extends Thread{
 		if (dest!= -1) {// nelle successive istruzioni viene inviato il messaggio del client gestito da questo ThreadServer, agli altri ThreadServer presenti nell'apposito vettore.
 			for(int i=0;i<ThreadVect.size();i++) {
 				if(dest!=i) {
-			    ((ThreadServer) ThreadVect.elementAt(i)).SendMSG("--> " + clientData);
+//			    ((ThreadServer) ThreadVect.elementAt(i)).SendMSG("--> " + clientData);
+				    ((ThreadServer) ThreadVect.elementAt(i)).SendMSG(clientData);					
 			    System.out.println(clientData);
 				}
 			}

@@ -55,9 +55,18 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
+import javax.swing.text.StyledDocument;
 
 import ChatServer.Client;
 
@@ -72,8 +81,8 @@ public class cGUI extends JPanel  implements ActionListener{
     private final int B_WIDTH = 600;
     private final int B_HEIGHT = 625;
 
-    private final int INITIAL_DELAY = 1000;
-    private final int PERIOD_INTERVAL = 1000;
+    private final int INITIAL_DELAY = 2000;
+    private final int PERIOD_INTERVAL = 2000;
 	
 
     private boolean chaton=false;
@@ -115,22 +124,24 @@ public class cGUI extends JPanel  implements ActionListener{
 	private Box boxCenter;
 	private Box boxBottom;
 	private Box boxALL;
+	private Box boxStatus;
 	private JLabel usernameLabel =new JLabel();
-	private JLabel atmoLabel = new JLabel();
+	private JLabel addressLabel = new JLabel();
 	private JLabel percorsoLabel = new JLabel();
 	private JLabel languageLabel = new JLabel();
 	private JLabel soundLabel = new JLabel();
-
+	private JLabel statusLabel = new JLabel();
 	
 	private JButton btnStart =null;
 	private JTextArea tareaIn;
 	private JTextArea tareaOut;
-
+	//0311
+	private JTextPane textPane;	
+	//0311
+//	private JTextPane textPaneStatus;
 	Client chattone;
 	
-    public cGUI() {
-
-     	
+    public cGUI() { 	
      
         msgB.SetLanguage("it", "IT");
    
@@ -154,7 +165,10 @@ public class cGUI extends JPanel  implements ActionListener{
         
 		MenuStart();
 		
-		PrintStream pStream = new PrintStream(new CustomOutputStream(tareaOut));
+		//0311		PrintStream pStream = new PrintStream(new CustomOutputStream(tareaOut));
+		//0311			
+		PrintStream pStream = new PrintStream(new CustomOutputStream(textPane));		
+		//0311	
 		System.setOut(pStream);
 		System.setErr(pStream);     
 		
@@ -166,7 +180,7 @@ public class cGUI extends JPanel  implements ActionListener{
 			e.printStackTrace();
 		}
 		
-		chattone.getList();
+		chattone.SendListCMD();
 
 	    buildComponent();
     }
@@ -175,11 +189,24 @@ public class cGUI extends JPanel  implements ActionListener{
     	Menu();
     	panelMenuSetStatus(false);
     } 
-    private void Menu() {
-    	
-   
-    	
+    private void Menu() {  	
+     	
     	btnStart = new JButton();
+    	
+    	btnStart.setOpaque(false);
+    	btnStart.setFocusPainted(false);
+    	btnStart.setBorderPainted(false);
+    	btnStart.setContentAreaFilled(false);
+    	btnStart.setForeground(Color.BLUE);
+ //   	setBorder(BorderFactory.createEmptyBorder(0,0,0,0)); 
+  //  	btnStart.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
+    	//btnStart.setForeground(Color.BLUE);
+  /*  	btnStart.setBorderPainted(false);
+    	btnStart.setFocusPainted(false);
+    	btnStart.setContentAreaFilled(false);*/
+ //   	btnStart.setBounds(10,40,50,20);
+  //  	btnStart.setBorder(new Border(10));
+    	
     	Border edge=BorderFactory.createRaisedBevelBorder();
     	Dimension size = new Dimension(100,60);
    //3005   	btnStart.setBorder(edge);
@@ -189,7 +216,7 @@ public class cGUI extends JPanel  implements ActionListener{
  
 
  		size = new Dimension(80,20);
- 		atmoLabel.setPreferredSize(size);  //3005     
+ 		addressLabel.setPreferredSize(size);  //3005     
  		userCombo.setPreferredSize(size);  //3005
  		percorsoLabel.setPreferredSize(size);  //3005       
  		bkgCombo.setPreferredSize(size);  //3005          
@@ -199,8 +226,8 @@ public class cGUI extends JPanel  implements ActionListener{
  		usernameField.setPreferredSize(size);  //3005  
  		soundCheckBox.setPreferredSize(size);  //3005
 
- 
-
+ 		statusLabel.setPreferredSize(new Dimension(B_WIDTH, 20));  
+ 		statusLabel.setText("-------------------Mathy");
        setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
            
 
@@ -210,7 +237,7 @@ public class cGUI extends JPanel  implements ActionListener{
    	   Box boxUpper3 = Box.createVerticalBox();
      
        
-       boxUpper1.add(atmoLabel);       
+       boxUpper1.add(addressLabel);       
        boxUpper1.add(userCombo);
        //boxUpper1.add(Box.createVerticalStrut(10));
        boxUpper1.add(percorsoLabel);       
@@ -240,75 +267,81 @@ public class cGUI extends JPanel  implements ActionListener{
 //      	boxUpper.add(Box.createHorizontalStrut(5));        		
     	boxUpper.add(panHorseOpt); 
        	boxUpper.add(panOpt);              
-       
-       
-       Box boxVerticalLeft = Box.createVerticalBox();
-    
-        Box boxVerticalRight = Box.createVerticalBox();
- 
-        
-        tareaOut = new JTextArea(70, 20);      
-        JScrollPane scrollpOut = new JScrollPane(tareaOut);
      
- //    	boxCenter = Box.createHorizontalBox();
+       
+ //      Box boxVerticalLeft = Box.createVerticalBox();  
+//        Box boxVerticalRight = Box.createVerticalBox();
+        
+       tareaOut = new JTextArea(70, 20);      
+       //0311      JScrollPane scrollpOut = new JScrollPane(tareaOut);      
+      //0311
+       textPane = new JTextPane();
+       //textPane.setContentType("text/html");
+     //Initialize some styles.
+       addStylesToTextPAne();
+ //      textPane.setSize(10, 10);
+  //    textPane.setPreferredSize(new Dimension(10, 10));
+ //         textPane.setBounds( 0, 0, 70, 20 );
+       JScrollPane scrollpOut = new JScrollPane(textPane);
+
+//         scrollpOut.setLayout( null );
+//         scrollpOut.add( textPane );    
+     scrollpOut.setPreferredSize(new Dimension(20, 370));
+ //      scrollpOut.setMinimumSize(new Dimension(10, 10));   
+ 	tareaIn = new JTextArea(5, 5);  
+    JScrollPane scrollpIn = new JScrollPane(tareaIn);      
+       
+     //0311       
+//  	boxCenter = Box.createHorizontalBox();
     	boxCenter = Box.createVerticalBox();
+    	boxCenter.add(Box.createVerticalStrut(10));
      	boxCenter.add(Box.createHorizontalStrut(B_WIDTH/10));
      	boxCenter.add(scrollpOut);
     	boxCenter.add(Box.createHorizontalStrut(B_WIDTH/10));
-    	
-    	tareaIn = new JTextArea(10, 20);  
-    	
-        JScrollPane scrollpIn = new JScrollPane(tareaIn);      
+   	
+         
       	boxCenter.add(Box.createHorizontalStrut(B_WIDTH/10));
-     	boxCenter.add(scrollpIn);
+       	boxCenter.add(scrollpIn);
     	boxCenter.add(Box.createHorizontalStrut(B_WIDTH/10));
     	
-    	//boxCenter.add(Box.createVerticalStrut(10));
+    	boxCenter.add(Box.createVerticalStrut(10));
+    	
  //!!!!!!    	boxCenter.setSize(100, 100);
    
-     	//panButtonStart.setLayout(new GridLayout(3,4,10,10));//3005
       	panButtonStart.add(btnStart);//3005
-
      	boxBottom = Box.createHorizontalBox();
   	
-  //      boxBottom.add(Box.createHorizontalStrut(B_WIDTH/10)); //3005
- //       boxBottom.add(Box.createVerticalStrut(10)); //3005
      	boxBottom.add(Box.createHorizontalStrut(B_WIDTH/2-50)); //3005
         boxBottom.add(panButtonStart);//3005
        	boxBottom.add(Box.createHorizontalStrut(B_WIDTH/2-50)); //3005
- //     boxBottom.setBounds(B_WIDTH, B_HEIGHT-100, 50, 50); //3005
- 
-   
- //3005      boxBottom.add(btnStart);   
-       
+        
      	boxALL= Box.createVerticalBox();
     	boxALL.add(Box.createVerticalStrut(B_HEIGHT));
     	
         BoxLayout box=new BoxLayout(this,BoxLayout.Y_AXIS);
-        this.setLayout(box);
-
-        boxBottom.setOpaque( false );//3005
+      this.setLayout(box);
  
+        boxBottom.setOpaque( false );//3005
        
-        this.add(boxUpper);
-//3005        this.add(boxBottom);
-        this.add(Box.createVerticalStrut(50));
-        this.add(boxCenter);
-    // 3005   this.add(boxBottom);
-        this.add(Box.createVerticalStrut(5));//3005
+ /*       textPaneStatus = new JTextPane();
+        textPaneStatus.setSize(10, B_WIDTH);
+        JScrollPane scrollpStatus = new JScrollPane(textPaneStatus);  */  
+        boxStatus = Box.createHorizontalBox();
+        boxStatus.add(statusLabel); 
+ //       boxStatus.add(scrollpStatus); 
+        boxStatus.add(Box.createHorizontalStrut(B_WIDTH));
+
+        this.add(boxUpper); 
+        this.add(Box.createVerticalStrut(10));
+
+        this.add(boxCenter); 
+       this.add(Box.createVerticalStrut(10));//3005
+       
         this.add(boxBottom);    
-        this.add(boxALL);
+    this.add(boxALL);
+    this.add(boxStatus);
         this.setOpaque( false );//3005
-  //      this.add(boxBottom,BorderLayout.SOUTH);//3005
-             
-//        this.add(boxUpper,BorderLayout.NORTH);
-    	
- //       this.add(panHorse);
- //      	this.add(panHorseOpt);
-//        this.add(boxVerticalLeft,BorderLayout.WEST);
- //       this.add(boxVerticalRight,BorderLayout.EAST);
-        
-        
+         
  //0111       buildComponent();
         bkgCombo.addActionListener(this);     
         userCombo.addActionListener(this);    
@@ -322,8 +355,41 @@ public class cGUI extends JPanel  implements ActionListener{
      
       	
    	} 
+  
+    
+    protected void addStylesToTextPAne() 
+    {
+    StyledDocument doc = textPane.getStyledDocument();
+    Style def = StyleContext.getDefaultStyleContext().
+                    getStyle(StyleContext.DEFAULT_STYLE);
+    
+    Style regular = doc.addStyle("regular", def);
+    StyleConstants.setFontFamily(def, "SansSerif");
 
-        
+    Style s = doc.addStyle("italic", regular);
+    StyleConstants.setItalic(s, true);
+
+    Style sR = doc.addStyle("italic", regular);
+    sR = doc.addStyle("bold", regular);
+    StyleConstants.setBold(sR, true);
+    StyleConstants.setAlignment(sR, StyleConstants.ALIGN_RIGHT);
+    StyleConstants.setForeground(sR, Color.BLUE);
+//      textPane.setParagraphAttributes(sR, true);
+    
+    
+    textPane.setParagraphAttributes(s, false);
+    
+    s = doc.addStyle("small", regular);
+    StyleConstants.setFontSize(s, 10);
+
+    s = doc.addStyle("large", regular);
+    StyleConstants.setFontSize(s, 16);
+
+    s = doc.addStyle("icon", regular);
+    textPane.setEditable(false);
+}
+    
+    
     private void ClipSound(Clip clipsound,boolean state)
     {
     	if(soundON)
@@ -345,19 +411,21 @@ public class cGUI extends JPanel  implements ActionListener{
     { 
 		chattone.hello(usernameField.getText());
    		chaton=true;
-   		btnStart.setText(msgB.GetResourceValue("btn_send"));       		
+   		btnStart.setText(msgB.GetResourceValue("btn_send"));   
+   		usernameField.setEditable(false);
    		panelMenuSetStatus(true);
       	ClipSound(clipWin,false);
         ClipSound(clipRace,false);
     	ClipSound(clipMenu,true); 
-//    	timer = new Timer();
-//    	timer.scheduleAtFixedRate(new ScheduleTask(),INITIAL_DELAY, PERIOD_INTERVAL);
+    	timer = new Timer();
+    	timer.scheduleAtFixedRate(new ScheduleTask(),INITIAL_DELAY, PERIOD_INTERVAL);
 	}
     private class ScheduleTask extends TimerTask {
 
         @Override
         public void run() {
-        	chattone.getList();
+        	chattone.SendListCMD();
+        	buildList();
         }
     } 
     
@@ -370,7 +438,9 @@ public class cGUI extends JPanel  implements ActionListener{
   
        	if(pulsante.contentEquals("comboBoxChanged"))
        	{
+       		
        		JComboBox cb= (JComboBox) e.getSource();
+       		
        		if(cb==languageCombo)   
        		{
        			chgLanguage();
@@ -380,11 +450,16 @@ public class cGUI extends JPanel  implements ActionListener{
        		{
        	        loadBKGimg();
        		   	repaint();
+       		
        		}
+       		
        		else if (cb==userCombo)
        		{	
+          		 
        			chattone.setDestName(userCombo.getSelectedItem().toString());
+
        		}	
+       		
        	}
        	else if(MessagesBundle.GetResourceKey(pulsante).contentEquals("label_sound"))
        	{	
@@ -420,7 +495,20 @@ public class cGUI extends JPanel  implements ActionListener{
     	
     	String d=tareaIn.getText();
     	chattone.sendData(d);
-    	tareaOut.append(d+"\n");
+//0311    	tareaOut.append(d+"\n");
+   	 //0311 
+   	 StyledDocument doc = textPane.getStyledDocument();
+     doc.setLogicalStyle(doc.getLength(), doc.getStyle("bold"));
+        try {
+                doc.insertString(doc.getLength(), d+"\n",doc.getStyle("bold"));
+        } catch (BadLocationException ble) {
+    
+            System.err.println("Couldn't insert initial text into text pane.");
+        }
+//0311    	
+        doc.setLogicalStyle(doc.getLength(), doc.getStyle("italic"));
+        
+
     	tareaIn.setText(""); 
 	}
     
@@ -478,19 +566,12 @@ public class cGUI extends JPanel  implements ActionListener{
     	}
         else
         		languageCombo.setSelectedIndex(0);
-     	
-     	 itemCount = userCombo.getItemCount();
-         for( i=0;i<itemCount;i++){
-        	 userCombo.removeItemAt(0);
-          }   
-        
-         for(i=0;i<chattone.getThreadClient().getList().size();i++)
-        	 userCombo.addItem(chattone.getThreadClient().getList().elementAt(i));
-        
+     	        
  //        panHorse.add(atmoLabel);       
 //       panHorse.add(atmoCombo);
-      
-  
+        
+      buildList();
+        
 //        panHorse.add(percorsoLabel);       
 //        panHorse.add(bkgCombo)
         if(chaton)
@@ -498,7 +579,7 @@ public class cGUI extends JPanel  implements ActionListener{
         else
           	btnStart.setText(msgB.GetResourceValue("btn_start"));
         usernameLabel.setText(msgB.GetResourceValue("label_username"));
-    	atmoLabel.setText(msgB.GetResourceValue("label_atmo"));
+    	addressLabel.setText(msgB.GetResourceValue("label_address"));
     	percorsoLabel.setText(msgB.GetResourceValue("label_place"));
     	languageLabel.setText(msgB.GetResourceValue("label_language"));
     	soundCheckBox.setText(msgB.GetResourceValue("label_sound"));
@@ -541,6 +622,29 @@ public class cGUI extends JPanel  implements ActionListener{
 		}
 }
          
+    public void buildList() {
+    	
+    isSetByProgram=true;    	
+    int itemCount = userCombo.getItemCount();
+    String sel=null;
+    
+    if(itemCount!=0)
+    	sel=userCombo.getSelectedItem().toString();
+    
+    for( int i=0;i<itemCount;i++){
+     	 userCombo.removeItemAt(0);
+       }
+    int naddress=chattone.getThreadClient().getList().size();   
+    for(int i=0;i<naddress;i++) {
+    	userCombo.addItem(chattone.getThreadClient().getList().elementAt(i));
+    	if (chattone.getThreadClient().getList().elementAt(i).equalsIgnoreCase(sel))
+        		userCombo.setSelectedIndex(i);
+    }
+    
+   // userCombo.setSelectedIndex(userCombo.getItemCount()-1);
+	isSetByProgram=false;
+    } 
+    
     private void drawBackground(Graphics g) {
     	g.drawImage(imagebkg, 0, 0, this);     
         

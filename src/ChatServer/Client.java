@@ -110,7 +110,7 @@ public class Client {
 		hello(); // prima di poter inviare i dati il client deve dire il proprio nome
 		
 	}
-	public void getList() {
+	public void SendListCMD() {
 		
 		sendData(command.getLIST_CMD());
 	}
