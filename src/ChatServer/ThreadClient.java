@@ -12,8 +12,8 @@ public class ThreadClient extends Thread{
 	String result,clientName;
 	boolean endChat=false;
 	CmdUtil command;
+	SharedRegion SR;
   	DBManager dbchat = null;
-    // insert three new rows
 ;
 	
 	java.util.Vector <String> list;
@@ -23,9 +23,10 @@ public class ThreadClient extends Thread{
 	 * @param inputServer BufferedReader
 	 * @param clientName String
 	 */
-public ThreadClient (BufferedReader inputServer, String clientName){//viene passato come parametro lo stream per leggere i dati dal server
+public ThreadClient (BufferedReader inputServer, String clientName, SharedRegion SR){//viene passato come parametro lo stream per leggere i dati dal server
 	this.inputServer=inputServer;
 	this.clientName=clientName;
+	this.SR= SR;
 	command= new CmdUtil();
 	list=new 	java.util.Vector <String>(1,1);
 	dbchat=new DBManager();
@@ -70,12 +71,7 @@ public ThreadClient (BufferedReader inputServer, String clientName){//viene pass
 			System.out.println(command.getDataCMD(clientData));
 			break;	
 		case 4: //comando list
-			StringTokenizer data= new StringTokenizer(command.getDataCMD(clientData),"|");
-			list.removeAllElements();
-			while(data.hasMoreTokens())
-			list.addElement(data.nextToken());
-			list.addElement("all");			
-//			list.set(list.size()-1, "all");
+			ListCMD(clientData);
 			break;
 			
 		default : 
@@ -90,14 +86,23 @@ public ThreadClient (BufferedReader inputServer, String clientName){//viene pass
 	
 	private void DataCMD(String clientData) {
 		// TODO Auto-generated method stub
-		String data=command.getDataCMD(clientData);
-		System.out.println(data);	
+		String data=command.getDataCMD(clientData);	
 		 String dest = data.substring(0, data.indexOf(":"));
 		 String mes=data.substring(data.indexOf(":")+1, data.length()-1);
-		 dbchat.insert(clientName, dest, mes);
-
+//		 dbchat.insert(clientName, dest, mes);
+		 if(SR.get().equalsIgnoreCase(dest))
+				System.out.println(mes);
 	}
 
+	private void ListCMD(String clientData) {
+		StringTokenizer data= new StringTokenizer(command.getDataCMD(clientData),"|");
+		list.removeAllElements();
+		while(data.hasMoreTokens())
+			list.addElement(data.nextToken());
+		list.addElement("all");			
+//	list.set(list.size()-1, "all");
+		SR.put(list);
+}
 	public java.util.Vector <String> getList() { 
 		
 		return list;

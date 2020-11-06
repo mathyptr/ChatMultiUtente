@@ -204,7 +204,8 @@ public class ThreadServer extends Thread{
 	public String getList() {
 		String list=command.getLIST_CMD();
 		for(int i=0;i<ThreadVect.size();i++)
-			list=list+((ThreadServer) ThreadVect.elementAt(i)).getClientName()+"|";
+			if(((ThreadServer) ThreadVect.elementAt(i)).isAlive())
+			 list=list+((ThreadServer) ThreadVect.elementAt(i)).getClientName()+"|";
 		return list;
 	}
 }

@@ -116,7 +116,7 @@ public class cGUI extends JPanel  implements ActionListener{
 	
 	private JTextField usernameField = new JTextField("10",2);
 	private JComboBox userCombo = new JComboBox();
-	private JComboBox bkgCombo = new JComboBox();
+//	private JComboBox bkgCombo = new JComboBox();
 	private JComboBox 	languageCombo = new JComboBox();
 	private JCheckBox soundCheckBox= new JCheckBox();
 
@@ -127,7 +127,7 @@ public class cGUI extends JPanel  implements ActionListener{
 	private Box boxStatus;
 	private JLabel usernameLabel =new JLabel();
 	private JLabel addressLabel = new JLabel();
-	private JLabel percorsoLabel = new JLabel();
+//	private JLabel percorsoLabel = new JLabel();
 	private JLabel languageLabel = new JLabel();
 	private JLabel soundLabel = new JLabel();
 	private JLabel statusLabel = new JLabel();
@@ -193,11 +193,11 @@ public class cGUI extends JPanel  implements ActionListener{
      	
     	btnStart = new JButton();
     	
-    	btnStart.setOpaque(false);
+   /* 	btnStart.setOpaque(false);
     	btnStart.setFocusPainted(false);
     	btnStart.setBorderPainted(false);
     	btnStart.setContentAreaFilled(false);
-    	btnStart.setForeground(Color.BLUE);
+    	btnStart.setForeground(Color.BLUE);*/
  //   	setBorder(BorderFactory.createEmptyBorder(0,0,0,0)); 
   //  	btnStart.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
     	//btnStart.setForeground(Color.BLUE);
@@ -218,8 +218,8 @@ public class cGUI extends JPanel  implements ActionListener{
  		size = new Dimension(80,20);
  		addressLabel.setPreferredSize(size);  //3005     
  		userCombo.setPreferredSize(size);  //3005
- 		percorsoLabel.setPreferredSize(size);  //3005       
- 		bkgCombo.setPreferredSize(size);  //3005          
+ //		percorsoLabel.setPreferredSize(size);  //3005       
+ //		bkgCombo.setPreferredSize(size);  //3005          
  		languageLabel.setPreferredSize(size);  //3005
  		languageCombo.setPreferredSize(size);  //3005
  		usernameLabel.setPreferredSize(size);  //3005;
@@ -240,8 +240,8 @@ public class cGUI extends JPanel  implements ActionListener{
        boxUpper1.add(addressLabel);       
        boxUpper1.add(userCombo);
        //boxUpper1.add(Box.createVerticalStrut(10));
-       boxUpper1.add(percorsoLabel);       
-       boxUpper1.add(bkgCombo);          
+//       boxUpper1.add(percorsoLabel);       
+//       boxUpper1.add(bkgCombo);          
 //       boxUpper1.add(Box.createHorizontalStrut(20));  
        boxUpper2.add(languageLabel);
        boxUpper2.add(languageCombo);
@@ -343,7 +343,7 @@ public class cGUI extends JPanel  implements ActionListener{
         this.setOpaque( false );//3005
          
  //0111       buildComponent();
-        bkgCombo.addActionListener(this);     
+//        bkgCombo.addActionListener(this);     
         userCombo.addActionListener(this);    
         languageCombo.addActionListener(this);
         btnStart.addActionListener(this);
@@ -446,12 +446,12 @@ public class cGUI extends JPanel  implements ActionListener{
        			chgLanguage();
        			buildComponent();
        		}
-       		else if(cb==bkgCombo)  
+ /*      		else if(cb==bkgCombo)  
        		{
        	        loadBKGimg();
        		   	repaint();
        		
-       		}
+       		}*/
        		
        		else if (cb==userCombo)
        		{	
@@ -532,30 +532,31 @@ public class cGUI extends JPanel  implements ActionListener{
     {
     	isSetByProgram=true;
     	int i;
-    	 int itemCount = bkgCombo.getItemCount();
+ /*   	 int itemCount = bkgCombo.getItemCount();
     	 
         for( i=0;i<itemCount;i++){
         	bkgCombo.removeItemAt(0);
-         }
+         }*/
         String lan;
         if(languageCombo.getSelectedItem()!=null)
         	lan=languageCombo.getSelectedItem().toString();
         else 
         	lan=null;
         
-        itemCount = languageCombo.getItemCount();
+        int itemCount = languageCombo.getItemCount();
         for( i=0;i<itemCount;i++){
         	languageCombo.removeItemAt(0);
          }
     
   //      remove(panHorse);        
         
-        bkgCombo.addItem(msgB.GetResourceValue("bkg_sand"));
+/*        bkgCombo.addItem(msgB.GetResourceValue("bkg_sand"));
         bkgCombo.addItem(msgB.GetResourceValue("bkg_field"));
         bkgCombo.addItem(msgB.GetResourceValue("bkg_green"));
         bkgCombo.addItem(msgB.GetResourceValue("bkg_rock")); 
         bkgCombo.addItem(msgB.GetResourceValue("bkg_ice"));
         bkgCombo.addItem(msgB.GetResourceValue("bkg_railroad")); 
+        */
         languageCombo.addItem("IT");
         languageCombo.addItem("EN");          
         if(lan!=null) {
@@ -580,7 +581,7 @@ public class cGUI extends JPanel  implements ActionListener{
           	btnStart.setText(msgB.GetResourceValue("btn_start"));
         usernameLabel.setText(msgB.GetResourceValue("label_username"));
     	addressLabel.setText(msgB.GetResourceValue("label_address"));
-    	percorsoLabel.setText(msgB.GetResourceValue("label_place"));
+//    	percorsoLabel.setText(msgB.GetResourceValue("label_place"));
     	languageLabel.setText(msgB.GetResourceValue("label_language"));
     	soundCheckBox.setText(msgB.GetResourceValue("label_sound"));
 
@@ -588,7 +589,7 @@ public class cGUI extends JPanel  implements ActionListener{
     }
     
     
-    private void loadBKGimg()
+  /*  private void loadBKGimg()
    	{  	
     	String bkgstr,filebkg=null;
 //    	bkgstr=bkgCombo.getSelectedItem().toString();
@@ -620,7 +621,7 @@ public class cGUI extends JPanel  implements ActionListener{
 		// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-}
+}*/
          
     public void buildList() {
     	
@@ -634,12 +635,20 @@ public class cGUI extends JPanel  implements ActionListener{
     for( int i=0;i<itemCount;i++){
      	 userCombo.removeItemAt(0);
        }
-    int naddress=chattone.getThreadClient().getList().size();   
+    java.util.Vector <String> v= chattone.getList( );
+    int naddress=v.size();   
+    for(int i=0;i<naddress;i++) {
+    	userCombo.addItem(v.elementAt(i));
+    	if (v.elementAt(i).equalsIgnoreCase(sel))
+        		userCombo.setSelectedIndex(i);
+    }    
+    
+   /* int naddress=chattone.getThreadClient().getList().size();   
     for(int i=0;i<naddress;i++) {
     	userCombo.addItem(chattone.getThreadClient().getList().elementAt(i));
     	if (chattone.getThreadClient().getList().elementAt(i).equalsIgnoreCase(sel))
         		userCombo.setSelectedIndex(i);
-    }
+    }*/
     
    // userCombo.setSelectedIndex(userCombo.getItemCount()-1);
 	isSetByProgram=false;

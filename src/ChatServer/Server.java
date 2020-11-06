@@ -43,6 +43,7 @@ public class Server {
 				System.out.println("Errore di connessione");
 				break;
 			}
+			checkThread();// controllo che i thread siano ancora vivi
 			ThreadVect.addElement(new ThreadServer(ThreadVect, clientSocket)); // viene inserito un nuovo
 																				// ThreadServer
 																				// nel vettore che si occupera'
@@ -50,7 +51,7 @@ public class Server {
 																				// comunicazione con il client
 				ThreadVect.elementAt(ThreadVect.size() - 1).start();// il thread in questione viene fatto partire
 				System.out.println("Thread " + ThreadVect.size() + " partito");
-				checkThread();// controllo che i thread siano ancora vivi
+
 		}
 	}
 

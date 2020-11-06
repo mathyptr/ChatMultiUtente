@@ -16,6 +16,7 @@ public class Client {
 	Socket clientSocket;
 	BufferedReader keyboard;
 	BufferedReader inputServer;
+	SharedRegion SR;
 	ThreadClient thC = null;
 	CmdUtil command;
 	/**
@@ -27,9 +28,9 @@ public class Client {
 	 */
 	public Client(String serverName, int serverPort, String name) {
 		try {
-			clientSocket = new Socket(serverName, serverPort);// viene creato un socket dato il nome del server e la sua
-																// porta
+			clientSocket = new Socket(serverName, serverPort);// viene creato un socket dato il nome del server e la sua porta
 			command= new CmdUtil();
+			SR = new SharedRegion();
 			clientName = name;
 			inputServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			outServer = new PrintStream(clientSocket.getOutputStream(), true);
@@ -55,7 +56,7 @@ public class Client {
 	 */
 	public void Start() throws InterruptedException {
 
-		thC = new ThreadClient(inputServer, clientName); // viene creato e fatto partire un ThreadClient
+		thC = new ThreadClient(inputServer, clientName, SR); // viene creato e fatto partire un ThreadClient
 		thC.start();
 		hello(); // prima di poter inviare i dati il client deve dire il proprio nome
 		String Message;
@@ -82,7 +83,7 @@ public class Client {
 	 */
 	public void StartG() throws InterruptedException {
 
-		thC = new ThreadClient(inputServer, clientName); // viene creato e fatto partire un ThreadClient
+		thC = new ThreadClient(inputServer, clientName, SR); // viene creato e fatto partire un ThreadClient
 		thC.start();
 //		hello(); // prima di poter inviare i dati il client deve dire il proprio nome
 
@@ -116,11 +117,15 @@ public class Client {
 	}
 	
 	public void setDestName(String destName) {
-		
+		SR.put(destName);
 		sendData(command.getSETDST_CMD()+destName);
 	}	
 	
 	public ThreadClient getThreadClient() {
 		return thC;
+	}
+	
+	public java.util.Vector <String> getList( ) {
+		return SR.getList();
 	}
 }
