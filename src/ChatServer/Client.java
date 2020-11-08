@@ -19,6 +19,9 @@ public class Client {
 	SharedRegion SR;
 	ThreadClient thC = null;
 	CmdUtil command;
+  	DBManager dbchat = null;
+ 	String type="cmd";
+    MessagesBundle msgB= new MessagesBundle();
 	/**
 	 * Costruttore della classe Client
 	 * 
@@ -27,19 +30,32 @@ public class Client {
 	 * @param name       String
 	 */
 	public Client(String serverName, int serverPort, String name) {
-		try {
-			clientSocket = new Socket(serverName, serverPort);// viene creato un socket dato il nome del server e la sua porta
+			this.serverName=serverName;
+			this.serverPort=serverPort;
 			command= new CmdUtil();
 			SR = new SharedRegion();
 			clientName = name;
+			dbchat=new DBManager();	
+			msgB.SetLanguage("it", "IT");
+	}
+	
+	public void setLanguage(String language, String country)
+	{
+		msgB.SetLanguage(language, country);
+	
+	}
+	
+	public void Connect(String type) {
+		try {	
+			this.type=type;
+			clientSocket = new Socket(serverName, serverPort);// viene creato un socket dato il nome del server e la sua porta			
 			inputServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			outServer = new PrintStream(clientSocket.getOutputStream(), true);
-			System.out.println("Connessione stabilita");
+			manageStatus("Connessione stabilita");
 		} catch (IOException e) {
 			System.out.println("Host non riconosciuto");
 		}
-	}
-
+	} 
 	/**
 	 * Metodo per l'invio al server del nome del Client: condizione necessaria per
 	 * l'inizio della chat
@@ -55,11 +71,14 @@ public class Client {
 	 * @throws InterruptedException
 	 */
 	public void Start() throws InterruptedException {
-
-		thC = new ThreadClient(inputServer, clientName, SR); // viene creato e fatto partire un ThreadClient
+		type="cmd";
+		Connect(type);
+		thC = new ThreadClient(inputServer, clientName, SR, "cmd",msgB); // viene creato e fatto partire un ThreadClient
 		thC.start();
 		hello(); // prima di poter inviare i dati il client deve dire il proprio nome
+		setDestName("all");
 		String Message;
+	
 		boolean ris=false;
 		while (!ris) { // viene richiamato il metodo sendData() finche l'utente non decide di lasciare
 							// la chat
@@ -83,7 +102,9 @@ public class Client {
 	 */
 	public void StartG() throws InterruptedException {
 
-		thC = new ThreadClient(inputServer, clientName, SR); // viene creato e fatto partire un ThreadClient
+		type="GUI";
+		Connect(type);
+		thC = new ThreadClient(inputServer, clientName, SR,type,msgB); // viene creato e fatto partire un ThreadClient
 		thC.start();
 //		hello(); // prima di poter inviare i dati il client deve dire il proprio nome
 
@@ -97,8 +118,11 @@ public class Client {
 	 * @return true nel caso l'utente digiti il comando di uscita
 	 */	
 	public boolean sendData(String Message) {
-		 if(command.checkCMD(Message)==-1) 
-			 outServer.println(command.getDATA_CMD()+Message); // il messaggio viene mandato al server
+		 if(command.checkCMD(Message)==-1) { 
+			 String s=command.getDATA_CMD()+Message;
+			 outServer.println(s); // il messaggio viene mandato al server
+			 dbchat.insert(clientName, SR.getDest(), Message);
+		  }
 		  else
 			outServer.println(Message);
 		return (Message.equalsIgnoreCase("q!")); // restituisce true quando l'utente ha inserito il comando per uscire
@@ -117,7 +141,7 @@ public class Client {
 	}
 	
 	public void setDestName(String destName) {
-		SR.put(destName);
+		SR.putDest(destName);
 		sendData(command.getSETDST_CMD()+destName);
 	}	
 	
@@ -128,4 +152,23 @@ public class Client {
 	public java.util.Vector <String> getList( ) {
 		return SR.getList();
 	}
+	
+	public void manageStatus(String s)
+	{
+		 if(type.equalsIgnoreCase("cmd"))
+			 System.out.println(s);
+		 else
+			 SR.pushStatusMSG(s);
+	}
+	public String getStatus()
+	{
+		 return SR.popStatusMSG();
+	}
+	public java.util.Vector <String> getMSGFromChat() {
+		java.util.Vector <String> msg=new java.util.Vector <String>(1,1);
+		msg=dbchat.msgFromChat(SR.getDest(), clientName);
+		return msg;
+	}
+		
+	
 }

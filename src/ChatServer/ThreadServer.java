@@ -1,6 +1,8 @@
 package ChatServer;
 import java.io.*;
 import java.net.Socket;
+
+
 /**
  * Classe per l'implementazione di un Thread Server che si occuperà della comunizione con un client
  *  TODO: in questa versione, che prevede da specifica solo due client, durante l'invio di
@@ -22,6 +24,7 @@ public class ThreadServer extends Thread{
 	java.util.Vector <String> CMD=new java.util.Vector <String> (1,1);
 	java.util.Vector <Thread> ThreadVect;
 	CmdUtil command;
+//    MessagesBundle msgB= new MessagesBundle();
 	/**
 	 * Costruttore della classe ThreadServer
 	 * 
@@ -75,11 +78,13 @@ public class ThreadServer extends Thread{
 	 */
 	public boolean DecEndExec(int index, String clientData) {
 		boolean end=false;
-		
+//		System.out.println("DEBUG: " +clientData+ "\n");		
 		switch(index) { 
 		case 0 :  //comando hello: dalla fase initChat entriamo nella fase goChat
 			clientName=command.getDataCMD(clientData); // viene salvato in una variabile il nome del client
-			outClient.println("Ciao " + clientName + " ti diamo il benvenuto nella chat");
+//0811			outClient.println("Ciao " + clientName + " ti diamo il benvenuto nella chat");
+			outClient.println("hello_msg");			
+			
 			status="goChat";
 			break;
 		
@@ -99,7 +104,7 @@ public class ThreadServer extends Thread{
 		
 		case 3: //comando setDest: restiamo nella fase goChat ma cambiamo destinatario
 			if(status.equalsIgnoreCase("goChat"))
-				currentDest=command.getDataCMD(clientData);
+				currentDest=command.getDataCMD(clientData); 
 			break;
 			
 		case 4: //comando list
@@ -186,7 +191,8 @@ public class ThreadServer extends Thread{
 	public void SendToOther(String clientData) {
 		int dest = -1;
 		if ((dest = findDest(currentDest)) != -1) {// nelle successive istruzioni viene inviato il messaggio del client gestito da questo ThreadServer, all'apposito ThreadServer
-			  ((ThreadServer) ThreadVect.elementAt(dest)).SendMSG("--> " + clientData);
+			  ((ThreadServer) ThreadVect.elementAt(dest)).SendMSG(clientData);
+			//			  ((ThreadServer) ThreadVect.elementAt(dest)).SendMSG("--> " + clientData);
 			  System.out.println(clientData);
 		}
 	     else {

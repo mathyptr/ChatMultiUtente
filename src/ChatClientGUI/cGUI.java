@@ -82,15 +82,15 @@ public class cGUI extends JPanel  implements ActionListener{
     private final int B_HEIGHT = 625;
 
     private final int INITIAL_DELAY = 2000;
-    private final int PERIOD_INTERVAL = 2000;
+    private final int PERIOD_INTERVAL = 5000;
 	
 
     private boolean chaton=false;
-    private boolean pricegiving=false;
+ //   private boolean pricegiving=false;
     private boolean soundON=true;
     private Timer timer;
     private int x, y;
-    private String atmo="atmo_snow";
+//    private String atmo="atmo_snow";
 //    private Locale currentLocale;
  //   private ResourceBundle messages;
     MessagesBundle msgB= new MessagesBundle();
@@ -102,8 +102,8 @@ public class cGUI extends JPanel  implements ActionListener{
 // 	JPopupMenu popup = new JPopupMenu();
 //	JMenuBar menuBar = new JMenuBar();
 //	ImageIcon exitIcon = new ImageIcon("src/resources/exit.png");
-	BufferedImage imagebkg=null;
-	BufferedImage imagefinish=null;
+//	BufferedImage imagebkg=null;
+//	BufferedImage imagefinish=null;
 //	JMenu fileMenu = new JMenu("Opzioni");
 	
 	private JPanel panHorse= new JPanel();
@@ -114,9 +114,9 @@ public class cGUI extends JPanel  implements ActionListener{
 	private JPanel panHorseImgLeft= new JPanel();
 	private JPanel panButtonStart= new JPanel();
 	
-	private JTextField usernameField = new JTextField("10",2);
+	private JTextField usernameField = new JTextField("",2);
 	private JComboBox userCombo = new JComboBox();
-//	private JComboBox bkgCombo = new JComboBox();
+	private JComboBox bkgCombo = new JComboBox();
 	private JComboBox 	languageCombo = new JComboBox();
 	private JCheckBox soundCheckBox= new JCheckBox();
 
@@ -127,7 +127,7 @@ public class cGUI extends JPanel  implements ActionListener{
 	private Box boxStatus;
 	private JLabel usernameLabel =new JLabel();
 	private JLabel addressLabel = new JLabel();
-//	private JLabel percorsoLabel = new JLabel();
+	private JLabel percorsoLabel = new JLabel();
 	private JLabel languageLabel = new JLabel();
 	private JLabel soundLabel = new JLabel();
 	private JLabel statusLabel = new JLabel();
@@ -172,7 +172,7 @@ public class cGUI extends JPanel  implements ActionListener{
 		System.setOut(pStream);
 		System.setErr(pStream);     
 		
-		chattone = new Client(msgB.GetResourceValue("server_name"), Integer.valueOf(msgB.GetResourceValue("server_port")), "Mathy");
+	/*0811	chattone = new Client(msgB.GetResourceValue("server_name"), Integer.valueOf(msgB.GetResourceValue("server_port")), "Mathy");
 		try {
 			chattone.StartG();
 		} catch (InterruptedException e) {
@@ -181,7 +181,11 @@ public class cGUI extends JPanel  implements ActionListener{
 		}
 		
 		chattone.SendListCMD();
-
+   		chattone.setDestName("all");*/
+		isSetByProgram=true;
+   	  	userCombo.addItem("all");
+    	userCombo.setSelectedIndex(0);
+    	isSetByProgram=false;
 	    buildComponent();
     }
     
@@ -193,7 +197,7 @@ public class cGUI extends JPanel  implements ActionListener{
      	
     	btnStart = new JButton();
     	
-   /* 	btnStart.setOpaque(false);
+ /*   	btnStart.setOpaque(false);
     	btnStart.setFocusPainted(false);
     	btnStart.setBorderPainted(false);
     	btnStart.setContentAreaFilled(false);
@@ -240,8 +244,8 @@ public class cGUI extends JPanel  implements ActionListener{
        boxUpper1.add(addressLabel);       
        boxUpper1.add(userCombo);
        //boxUpper1.add(Box.createVerticalStrut(10));
-//       boxUpper1.add(percorsoLabel);       
-//       boxUpper1.add(bkgCombo);          
+ //      boxUpper1.add(percorsoLabel);       
+ //      boxUpper1.add(bkgCombo);          
 //       boxUpper1.add(Box.createHorizontalStrut(20));  
        boxUpper2.add(languageLabel);
        boxUpper2.add(languageCombo);
@@ -250,6 +254,7 @@ public class cGUI extends JPanel  implements ActionListener{
        boxUpper2.add(usernameField);  
 //       boxUpper2.add(Box.createHorizontalStrut(20));
         boxUpper3.add(soundCheckBox);
+        
  /*      boxUpper.add(Box.createHorizontalStrut(100));
        boxUpper.add(boxUpper1);
        boxUpper.add(Box.createHorizontalStrut(100));
@@ -278,7 +283,7 @@ public class cGUI extends JPanel  implements ActionListener{
        textPane = new JTextPane();
        //textPane.setContentType("text/html");
      //Initialize some styles.
-       addStylesToTextPAne();
+       addStylesToTextPAne(textPane);
  //      textPane.setSize(10, 10);
   //    textPane.setPreferredSize(new Dimension(10, 10));
  //         textPane.setBounds( 0, 0, 70, 20 );
@@ -343,7 +348,7 @@ public class cGUI extends JPanel  implements ActionListener{
         this.setOpaque( false );//3005
          
  //0111       buildComponent();
-//        bkgCombo.addActionListener(this);     
+   //     bkgCombo.addActionListener(this);     
         userCombo.addActionListener(this);    
         languageCombo.addActionListener(this);
         btnStart.addActionListener(this);
@@ -357,36 +362,36 @@ public class cGUI extends JPanel  implements ActionListener{
    	} 
   
     
-    protected void addStylesToTextPAne() 
+    protected void addStylesToTextPAne(JTextPane tp) 
     {
-    StyledDocument doc = textPane.getStyledDocument();
-    Style def = StyleContext.getDefaultStyleContext().
-                    getStyle(StyleContext.DEFAULT_STYLE);
-    
-    Style regular = doc.addStyle("regular", def);
-    StyleConstants.setFontFamily(def, "SansSerif");
+    	StyledDocument doc = tp.getStyledDocument();
+    	Style def = StyleContext.getDefaultStyleContext().
+    	getStyle(StyleContext.DEFAULT_STYLE);
 
-    Style s = doc.addStyle("italic", regular);
-    StyleConstants.setItalic(s, true);
+    	Style regular = doc.addStyle("regular", def);
+    	StyleConstants.setFontFamily(def, "SansSerif");
 
-    Style sR = doc.addStyle("italic", regular);
-    sR = doc.addStyle("bold", regular);
-    StyleConstants.setBold(sR, true);
-    StyleConstants.setAlignment(sR, StyleConstants.ALIGN_RIGHT);
-    StyleConstants.setForeground(sR, Color.BLUE);
-//      textPane.setParagraphAttributes(sR, true);
-    
-    
-    textPane.setParagraphAttributes(s, false);
-    
-    s = doc.addStyle("small", regular);
-    StyleConstants.setFontSize(s, 10);
+    	Style s = doc.addStyle("italic", regular);
+    	StyleConstants.setItalic(s, true);
 
-    s = doc.addStyle("large", regular);
-    StyleConstants.setFontSize(s, 16);
+    	Style sR = doc.addStyle("italic", regular);
+    	sR = doc.addStyle("bold", regular);
+    	StyleConstants.setBold(sR, true);
+    	StyleConstants.setAlignment(sR, StyleConstants.ALIGN_RIGHT);
+    	StyleConstants.setForeground(sR, Color.BLUE);
+    	//      textPane.setParagraphAttributes(sR, true);
 
-    s = doc.addStyle("icon", regular);
-    textPane.setEditable(false);
+
+    	textPane.setParagraphAttributes(s, false);
+
+    	s = doc.addStyle("small", regular);
+    	StyleConstants.setFontSize(s, 10);
+
+    	s = doc.addStyle("large", regular);
+    	StyleConstants.setFontSize(s, 16);
+
+    	s = doc.addStyle("icon", regular);
+    	textPane.setEditable(false);
 }
     
     
@@ -409,10 +414,32 @@ public class cGUI extends JPanel  implements ActionListener{
     
     private void startChat()
     { 
+    	chattone = new Client(msgB.GetResourceValue("server_name"), Integer.valueOf(msgB.GetResourceValue("server_port")), usernameField.getText());
+		try {
+			chattone.StartG();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		chattone.SendListCMD();
+   		chattone.setDestName("all");
+    	
 		chattone.hello(usernameField.getText());
    		chaton=true;
-   		btnStart.setText(msgB.GetResourceValue("btn_send"));   
+ //  		String h="<html><head><style>.button {  background-color: #4CAF50;  border: none;  color: white;  padding: 20px;  text-align: center;  text-decoration: none;  display: inline-block;  font-size: 16px;  margin: 4px 2px;}.button1 {border-radius: 2px;}</style></head><button class='button button1'>"+msgB.GetResourceValue("btn_send")+"</button></html>";
+//   		btnStart.setText(h);   		
+//   		btnStart.setText("<html><i>"+msgB.GetResourceValue("btn_send")+"</i></html>");   
+   		btnStart.setText(msgB.GetResourceValue("btn_send"));
    		usernameField.setEditable(false);
+/*   		java.util.Vector <String> v= chattone.getList( );
+   		int naddress=v.size();   
+   		for(int i=0;i<naddress;i++) {
+   			if (v.elementAt(i).equalsIgnoreCase("ALL"))
+         		userCombo.setSelectedIndex(i);
+   		}  */
+   		
+
    		panelMenuSetStatus(true);
       	ClipSound(clipWin,false);
         ClipSound(clipRace,false);
@@ -426,6 +453,9 @@ public class cGUI extends JPanel  implements ActionListener{
         public void run() {
         	chattone.SendListCMD();
         	buildList();
+        	String status=chattone.getStatus();
+        	if(!status.equalsIgnoreCase("empty"))
+        		statusLabel.setText(status);
         }
     } 
     
@@ -457,7 +487,13 @@ public class cGUI extends JPanel  implements ActionListener{
        		{	
           		 
        			chattone.setDestName(userCombo.getSelectedItem().toString());
-
+       			StyledDocument doc = textPane.getStyledDocument();
+       			textPane.setText("");
+       	        doc.setLogicalStyle(doc.getLength(), doc.getStyle("italic"));       			
+       			java.util.Vector <String> msg=chattone.getMSGFromChat();
+       			for(int i=0;i<msg.size();i++){	
+       				System.out.println(msg.elementAt(i));
+       			}
        		}	
        		
        	}
@@ -571,7 +607,7 @@ public class cGUI extends JPanel  implements ActionListener{
  //        panHorse.add(atmoLabel);       
 //       panHorse.add(atmoCombo);
         
-      buildList();
+  //    buildList();
         
 //        panHorse.add(percorsoLabel);       
 //        panHorse.add(bkgCombo)
@@ -587,42 +623,7 @@ public class cGUI extends JPanel  implements ActionListener{
 
     	isSetByProgram=false;
     }
-    
-    
-  /*  private void loadBKGimg()
-   	{  	
-    	String bkgstr,filebkg=null;
-//    	bkgstr=bkgCombo.getSelectedItem().toString();
-    	bkgstr=MessagesBundle.GetResourceKey(bkgCombo.getSelectedItem().toString());
-  	  
-		if(bkgstr.contentEquals("bkg_sand"))
-			filebkg="/img/bkg/sand.jpg";		
-		else if(bkgstr.contentEquals("bkg_field"))
-			filebkg="/img/bkg/field.jpg";
-		else if(bkgstr.contentEquals("bkg_green"))
-			filebkg="/img/bkg/green.jpg";
-		else if(bkgstr.contentEquals("bkg_railroad"))
-			filebkg="/img/bkg/railroad.jpg";
-		else if(bkgstr.contentEquals("bkg_rock"))
-			filebkg="/img/bkg/rock.jpg";
-		else if(bkgstr.contentEquals("bkg_ice"))
-			filebkg="/img/bkg/ice.jpg";
-	
-		try {
-			imagefinish=(BufferedImage) ImageIO.read(getClass().getResourceAsStream("/img/bkg/finish.png"));
-			if(filebkg!=null)
-			{	
-//				Image img=ImageIO.read(getClass().getResourceAsStream(filebkg)).getScaledInstance(B_WIDTH, B_HEIGHT,Image.SCALE_SMOOTH);
-//				imagebkg = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
-				
-				imagebkg=(BufferedImage) ImageIO.read(getClass().getResourceAsStream(filebkg));
-			}
-		} catch (IOException e1) {
-		// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-}*/
-         
+ 
     public void buildList() {
     	
     isSetByProgram=true;    	
@@ -642,28 +643,17 @@ public class cGUI extends JPanel  implements ActionListener{
     	if (v.elementAt(i).equalsIgnoreCase(sel))
         		userCombo.setSelectedIndex(i);
     }    
-    
-   /* int naddress=chattone.getThreadClient().getList().size();   
+/*    
+    int naddress=chattone.getThreadClient().getList().size();   
     for(int i=0;i<naddress;i++) {
     	userCombo.addItem(chattone.getThreadClient().getList().elementAt(i));
     	if (chattone.getThreadClient().getList().elementAt(i).equalsIgnoreCase(sel))
         		userCombo.setSelectedIndex(i);
-    }*/
-    
+    }
+    */
    // userCombo.setSelectedIndex(userCombo.getItemCount()-1);
 	isSetByProgram=false;
     } 
-    
-    private void drawBackground(Graphics g) {
-    	g.drawImage(imagebkg, 0, 0, this);     
-        
-	}  
 
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-    	drawBackground(g);
-    
-    }
     
 }

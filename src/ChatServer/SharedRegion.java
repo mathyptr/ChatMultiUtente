@@ -1,11 +1,80 @@
 package ChatServer;
 
-public class SharedRegion {
-		private String dest;
-		private java.util.Vector <String> list=new java.util.Vector <String>(1,1);
-		private boolean dispDest= false,dispList = false;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.Semaphore;
 
-	public synchronized String get() {
+public class SharedRegion {
+		private String dest="all";
+		private java.util.Vector <String> list=new java.util.Vector <String>(1,1);
+//		private boolean dispDest= false,dispList = false;
+		
+		Queue<String> status=new LinkedList<>();;
+		
+		Semaphore sem= new Semaphore(1,true);
+		
+		public  void pushStatusMSG(String msg) {
+			status.add(msg);
+		}
+		
+		public String popStatusMSG() {
+			if (status.isEmpty())
+				return "Empty";
+			else
+				return status.poll();
+		}
+		
+		
+		public String getDest() {
+			String d="";
+			try {
+				sem.acquire();
+				d= dest;
+			}
+			catch(InterruptedException e) {
+				System.out.println("Errore Semaforo");
+			}
+			sem.release();
+			return d;
+		}
+		public void putDest(String d) {			
+			
+			try {
+				sem.acquire();
+				dest = d;
+			}
+			catch(InterruptedException e) {
+				System.out.println("Errore Semaforo");
+			}
+			sem.release();
+		}
+		public java.util.Vector <String> getList() {
+			java.util.Vector l=new java.util.Vector(1,1);
+			try {
+				sem.acquire();
+				l=(java.util.Vector <String> ) list.clone();
+			}
+			catch(InterruptedException e) {
+				System.out.println("Errore Semaforo");
+			}	
+			sem.release();	
+			return l;
+		}
+		
+		public void putList(java.util.Vector <String> l) {
+			
+			try {
+				sem.acquire();
+				list = (java.util.Vector <String> )l.clone();
+			}
+			catch(InterruptedException e) {
+				System.out.println("Errore Semaforo");
+			}	
+			sem.release();		
+		}		
+		
+		
+	/*public synchronized String get() {
 		while (dispDest == false) {
 			try {
 				wait();
@@ -47,4 +116,5 @@ public class SharedRegion {
 				notifyAll();
 				
 			}
+			*/
 }
