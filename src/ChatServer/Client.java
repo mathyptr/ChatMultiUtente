@@ -38,13 +38,22 @@ public class Client {
 			dbchat=new DBManager();	
 			msgB.SetLanguage("it", "IT");
 	}
-	
+	/**
+	 * Metodo per il settaggio della lingua 
+	 * 
+	 * @param language String
+	 * @param country String
+	 */
 	public void setLanguage(String language, String country)
 	{
 		msgB.SetLanguage(language, country);
 	
 	}
-	
+	/**
+	 * Metodo che permette la connessione con il server
+	 * 
+	 * @param type String
+	 */
 	public void Connect(String type) {
 		try {	
 			this.type=type;
@@ -135,24 +144,42 @@ public class Client {
 		hello(); // prima di poter inviare i dati il client deve dire il proprio nome
 		
 	}
+	/**
+	 * Metodo per l'invio del comando di richiesta degli utenti connessi
+	 * 
+	 */
 	public void SendListCMD() {
 		
 		sendData(command.getLIST_CMD());
 	}
-	
+	/**
+	 * Metodo che permette il settaggio dell'utente destinatario
+	 * 
+	 */
 	public void setDestName(String destName) {
 		SR.putDest(destName);
 		sendData(command.getSETDST_CMD()+destName);
 	}	
-	
+	/**
+	 * Metodo che restituisce il ThreadClient attuale
+	 * @return il ThreadClient attuale
+	 * 
+	 */
 	public ThreadClient getThreadClient() {
 		return thC;
 	}
-	
+	/**
+	 * Metodo che restituisce la lista degli utenti connessi
+	 * @return la lista degli utenti connessi
+	 * 
+	 */
 	public java.util.Vector <String> getList( ) {
 		return SR.getList();
 	}
-	
+	/**
+	 * metodo per la memorizzazione del messaggio del server
+	 * @param s String
+	 */
 	public void manageStatus(String s)
 	{
 		 if(type.equalsIgnoreCase("cmd"))
@@ -160,12 +187,20 @@ public class Client {
 		 else
 			 SR.pushStatusMSG(s);
 	}
+	/**
+	 * metodo che permette notificare nella barra di stato i nuovi messaggi di altre chat 
+	 * @param s String
+	 */
 	public String getStatus()
 	{
 		 return SR.popStatusMSG();
 	}
-	public java.util.Vector <String> getMSGFromChat() {
-		java.util.Vector <String> msg=new java.util.Vector <String>(1,1);
+	/**
+	 * metodo che permette prelevare dal database i messaggi richiesti
+	 * @return i messaggi
+	 */
+	public java.util.Vector <String[]> getMSGFromChat() {
+		java.util.Vector <String[]> msg=new java.util.Vector <String[]>(1,1);
 		msg=dbchat.msgFromChat(SR.getDest(), clientName);
 		return msg;
 	}

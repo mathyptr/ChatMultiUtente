@@ -13,12 +13,12 @@ import javax.swing.JFrame;
 
 
 /**
- * descrizione
+ * Classe per la gestione dell'interfaccia della chat lato utente
  * @author Patrissi Mathilde
  */
 
 public class ChatClientGUI extends JFrame {
-	/**Costruttore della classe HorseRacing
+	/**Costruttore della classe ChatClientGUI
 	    */
     public ChatClientGUI() {
    	
@@ -32,7 +32,8 @@ public class ChatClientGUI extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
     }
-
+    /**Main
+	    */
     public static void main(String[] args) {
         
         EventQueue.invokeLater(() -> {

@@ -58,7 +58,10 @@ public ThreadClient (BufferedReader inputServer, String clientName, SharedRegion
 			}
 		}
 	}
-
+	/**
+	 * metodo per la memorizzazione del messaggio del server
+	 * @param s String
+	 */
 	public void manageStatus(String s)
 	{
 		 String msg=msgB.GetResourceValue(s);
@@ -68,7 +71,10 @@ public ThreadClient (BufferedReader inputServer, String clientName, SharedRegion
 		 else
 			 SR.pushStatusMSG(msg);
 	}
-
+	/**
+	 * metodo che permette notificare nella barra di stato i nuovi messaggi di altre chat 
+	 * @param s String
+	 */
 	public void sendInfoInStatus(String s)
 	{
 	
@@ -77,7 +83,11 @@ public ThreadClient (BufferedReader inputServer, String clientName, SharedRegion
 		 else
 			 SR.pushStatusMSG(s);
 	}
-	
+	/**
+	 * metodo per la gestione dei messaggi dal server
+	 * @param index int
+	 * @param clientData String
+	 */
 	public void ServerResp(int index, String clientData) {
 		boolean end=false;
 		switch(index) { 
@@ -107,24 +117,30 @@ public ThreadClient (BufferedReader inputServer, String clientName, SharedRegion
 	
 	
 
-	
+	/**
+	 * metodo per la gestione e visualizzazione dei messaggi nella chat
+	 * @param clientData String
+	 */
 	
 	private void DataCMD(String clientData) {
 		// TODO Auto-generated method stub
 		String data=command.getDataCMD(clientData);	
 		 String src = data.substring(0, data.indexOf(":"));
 		 String mes=data.substring(data.indexOf(":")+1, data.length());
-		 dbchat.insert( src,clientName, mes);
+		 dbchat.insert( src,clientName, src+": "+mes);
 		 if(SR.getDest().equalsIgnoreCase(src)||SR.getDest().equalsIgnoreCase("all"))
 		 {
 			 if(type.equalsIgnoreCase("cmd"))
 				 System.out.print("--> ");
-			 System.out.println(mes);
+			 System.out.println(src+": "+mes);
 		 }
 		 else
 			 sendInfoInStatus(src+": "+mes);
 	}
-
+	/**
+	 * metodo per la gestione della lista degli utenti connessi
+	 * @param clientData String
+	 */
 	private void ListCMD(String clientData) {
 		StringTokenizer data= new StringTokenizer(command.getDataCMD(clientData),"|");
 		list.removeAllElements();
@@ -138,6 +154,10 @@ public ThreadClient (BufferedReader inputServer, String clientName, SharedRegion
 //	list.set(list.size()-1, "all");
 		SR.putList(list);
 }
+	/**
+	 * metodo per conoscere la lista degli utenti connessi
+	 * @return la lista degli utenti connessi
+	 */
 	public java.util.Vector <String> getList() { 
 		return SR.getList();	
 //		return list;

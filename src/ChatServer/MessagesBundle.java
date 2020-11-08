@@ -7,7 +7,9 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
- * descrizione
+ * Classe utilizzata per l'internazionalizzazione e la localizzazione della
+ * lingua
+ * 
  * @author Patrissi Mathilde
  */
 
@@ -19,17 +21,25 @@ public class MessagesBundle {
     
     public void MessagesBundle() {
         }
-    /**Metodo per il settaggio della lingua
-     * @param language String
-     * @param country String
-     */
+    /**
+	 * Metodo per il settaggio della lingua: La localizzazione del file avviene
+	 * tramite la coppia language country
+	 * 
+	 * @param language String
+	 * @param country  String
+	 */
     public void SetLanguage(String language, String country) {
     this.language=language;
     this.country=country;
     currentLocale = new Locale(language, country);
     messages = ResourceBundle.getBundle("language.MessagesBundle", currentLocale);
-    
     }
+    /**
+	 * Metodo per prelevare la chiave associata alla label value
+	 * 
+	 * @param value String
+	 * @return la chiave
+	 */
     public static String GetResourceKey(String value) {
     	String key="";
 	    Enumeration  bundleKeys= messages.getKeys();
@@ -41,6 +51,12 @@ public class MessagesBundle {
     	return key;
 	 
     }
+    /**
+	 * Metodo per prelevare la label associato alla chiave key
+	 * 
+	 * @param key String
+	 * @return la label
+	 */
     public static String GetResourceValue(String key) {
     	return messages.getString(key);
 	 

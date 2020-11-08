@@ -7,13 +7,13 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 /**
- *
- * @author sqlitetutorial.net
+ * Classe per la gestione del database
+ * @author Patrissi Mathilde
  */
 public class DBManager {
     String url = "jdbc:sqlite:.//db//chatDB.sqlite"; 
     /**
-     * Connect to the test.db database
+     * Metodo per la connessione al database
      *
      * @return the Connection object
      */
@@ -31,10 +31,11 @@ public class DBManager {
     }
 
     /**
-     * Insert a new row into the warehouses table
+     * Metodo per l'inserimento di una riga nel database
      *
-     * @param name
-     * @param capacity
+     * @param src String
+     * @param dest String
+     * @param mes String
      */
     public void insert(String src, String dest,String mes) {
         String sql = "INSERT INTO messages(source,dest,mess) VALUES(?,?,?)";
@@ -50,16 +51,26 @@ public class DBManager {
             System.out.println(e.getMessage());
         }
     }
-
-    public java.util.Vector <String> msgFromChat(String dest,String source) {
-    	 String sql = "SELECT mess FROM messages where source='"+source+"' and dest='"+dest+"' order by insert_at";
-    	 java.util.Vector <String> msg=new java.util.Vector <String>(1,1);
+    /**
+     * Metodo per prelevare i messaggi richiesti
+     *
+     * @param source String
+     * @param dest String
+     * @param il vettore contenente i messaggi
+     */
+    public java.util.Vector <String[]> msgFromChat(String dest,String source) {
+    	 String sql = "SELECT source,mess FROM messages where source='"+source+"' and dest='"+dest+"' or source='"+dest+"' and dest='"+source+"' order by insert_at";
+    	 java.util.Vector <String[]> msg=new java.util.Vector <String[]>(1,1);
+    	 String[] row;
     	 try{
      	Connection conn = this.connect();
         Statement stmt  = conn.createStatement();
      	ResultSet rs    = stmt.executeQuery(sql);
              while (rs.next()) {
-               msg.add(rs.getString("mess"));
+               row= new String[2];
+               row[0]=rs.getString("source");
+               row[1]=rs.getString("mess");               
+               msg.add(row);
              }
     } catch (SQLException e) {
         System.out.println(e.getMessage());

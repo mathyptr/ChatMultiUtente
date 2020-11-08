@@ -1,30 +1,25 @@
 package ChatClientGUI;
 
 
-/**
- * Class TextAreaPrintStream
- * extends PrintStream.
- * A custom made PrintStream which overrides methods println(String)
- * and print(String).
- * Thus, when the out stream is set as this PrintStream (with System.setOut
- * method), all calls to System.out.println(String) or System.out.print(String)
- * will result in an output stream of characters in the JTextArea given as an
- * argument of the constructor of the class.
- **/
-
-
 import java.io.*;
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
-	
+/**
+ * Classe di override dello standard output
+ * @author Patrissi Mathilde
+ */
 	public class CustomOutputStream extends OutputStream {
         private JTextPane textPane;
-		       
+        /**Costruttore della classe CustomOutputStream
+         * @param textArea JTextPane
+ 	    */
         public CustomOutputStream(JTextPane textArea) {
             this.textPane = textArea;
         }
-       
+        /**Metodo write
+         * @param textArea JTextPane
+ 	    */
         @Override
         public void write(int b) throws IOException {
  /*           // redirects data to the text area
@@ -44,10 +39,8 @@ import javax.swing.text.StyledDocument;
         }
 
         /**
-         * Method println
-         * @param the String to be output in the JTextArea textArea (private
-         * attribute of the class).
-         * After having printed such a String, prints a new line.
+         * Metod println
+         * @param string String
          **/
         public void println(String string) {
         	
@@ -62,9 +55,8 @@ import javax.swing.text.StyledDocument;
 
 
     /**
-     * Method print
-     * @param the String to be output in the JTextArea textArea (private
-     * attribute of the class).
+     * Metodo print
+     * @param string String
      **/
     public void print(String string) {
    	 StyledDocument doc = textPane.getStyledDocument();

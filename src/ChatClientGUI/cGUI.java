@@ -71,7 +71,7 @@ import javax.swing.text.StyledDocument;
 import ChatServer.Client;
 
 /**
- * descrizione
+ * Classe che gestisce la chat visualizzando i vari elementi grafici
  * @author Patrissi Mathilde
  */
 
@@ -86,26 +86,14 @@ public class cGUI extends JPanel  implements ActionListener{
 	
 
     private boolean chaton=false;
- //   private boolean pricegiving=false;
     private boolean soundON=true;
     private Timer timer;
     private int x, y;
-//    private String atmo="atmo_snow";
-//    private Locale currentLocale;
- //   private ResourceBundle messages;
     MessagesBundle msgB= new MessagesBundle();
     boolean isSetByProgram=false;
     Clip clipMenu;
     Clip clipRace;
     Clip clipWin; 
-    
-// 	JPopupMenu popup = new JPopupMenu();
-//	JMenuBar menuBar = new JMenuBar();
-//	ImageIcon exitIcon = new ImageIcon("src/resources/exit.png");
-//	BufferedImage imagebkg=null;
-//	BufferedImage imagefinish=null;
-//	JMenu fileMenu = new JMenu("Opzioni");
-	
 	private JPanel panHorse= new JPanel();
 	private JPanel panHorseOpt= new JPanel();
 	private JPanel panOpt= new JPanel();
@@ -135,12 +123,11 @@ public class cGUI extends JPanel  implements ActionListener{
 	private JButton btnStart =null;
 	private JTextArea tareaIn;
 	private JTextArea tareaOut;
-	//0311
 	private JTextPane textPane;	
-	//0311
-//	private JTextPane textPaneStatus;
 	Client chattone;
-	
+	/**
+	 * Costruttore della classe cGUI
+	 */
     public cGUI() { 	
      
         msgB.SetLanguage("it", "IT");
@@ -165,10 +152,7 @@ public class cGUI extends JPanel  implements ActionListener{
         
 		MenuStart();
 		
-		//0311		PrintStream pStream = new PrintStream(new CustomOutputStream(tareaOut));
-		//0311			
-		PrintStream pStream = new PrintStream(new CustomOutputStream(textPane));		
-		//0311	
+		PrintStream pStream = new PrintStream(new CustomOutputStream(textPane));			
 		System.setOut(pStream);
 		System.setErr(pStream);     
 		
@@ -188,11 +172,16 @@ public class cGUI extends JPanel  implements ActionListener{
     	isSetByProgram=false;
 	    buildComponent();
     }
-    
+    /**
+	 * Metodo per configurare la visualizzazione della finestra di avvio
+	 */
     private void MenuStart() {
     	Menu();
     	panelMenuSetStatus(false);
     } 
+    /**
+	 * Metodo per l'implementazione dell'interfaccia menu' iniziale
+	 */
     private void Menu() {  	
      	
     	btnStart = new JButton();
@@ -360,8 +349,10 @@ public class cGUI extends JPanel  implements ActionListener{
      
       	
    	} 
-  
-    
+    /**
+	 * Metodo per configurare gli stili di formattazione della classe TextPane
+	 * @param tp JTextPane
+	 */
     protected void addStylesToTextPAne(JTextPane tp) 
     {
     	StyledDocument doc = tp.getStyledDocument();
@@ -394,7 +385,12 @@ public class cGUI extends JPanel  implements ActionListener{
     	textPane.setEditable(false);
 }
     
-    
+    /**
+	 * Metodo per attivare o disattivare il suono
+	 * 
+	 * @param clipsound Clip
+	 * @param state     boolean
+	 */
     private void ClipSound(Clip clipsound,boolean state)
     {
     	if(soundON)
@@ -411,7 +407,9 @@ public class cGUI extends JPanel  implements ActionListener{
     			clipsound.stop();
  
     }
-    
+    /**
+	 * Metodo che permette l'inizio della chat inizializzando il client
+	 */
     private void startChat()
     { 
     	chattone = new Client(msgB.GetResourceValue("server_name"), Integer.valueOf(msgB.GetResourceValue("server_port")), usernameField.getText());
@@ -458,7 +456,13 @@ public class cGUI extends JPanel  implements ActionListener{
         		statusLabel.setText(status);
         }
     } 
-    
+    /**
+	 * Metodo per la gestione dei possibili eventi di interazione con l'utente
+	 * attraverso il menu'
+	 * 
+	 * @param e ActionEvent
+	 */
+
     public void actionPerformed(ActionEvent e)
     { 
     	if(!isSetByProgram)
@@ -466,35 +470,50 @@ public class cGUI extends JPanel  implements ActionListener{
     		
     	String pulsante=e.getActionCommand();
   
-       	if(pulsante.contentEquals("comboBoxChanged"))
-       	{
-       		
-       		JComboBox cb= (JComboBox) e.getSource();
-       		
-       		if(cb==languageCombo)   
-       		{
-       			chgLanguage();
-       			buildComponent();
-       		}
- /*      		else if(cb==bkgCombo)  
+    	if(pulsante.contentEquals("comboBoxChanged"))
+    	{
+
+    		JComboBox cb= (JComboBox) e.getSource();
+
+    		if(cb==languageCombo)   
+    		{
+    			chgLanguage();
+    			buildComponent();
+    		}
+    		/*      		else if(cb==bkgCombo)  
        		{
        	        loadBKGimg();
        		   	repaint();
-       		
+
        		}*/
-       		
-       		else if (cb==userCombo)
-       		{	
-          		 
-       			chattone.setDestName(userCombo.getSelectedItem().toString());
-       			StyledDocument doc = textPane.getStyledDocument();
-       			textPane.setText("");
-       	        doc.setLogicalStyle(doc.getLength(), doc.getStyle("italic"));       			
-       			java.util.Vector <String> msg=chattone.getMSGFromChat();
-       			for(int i=0;i<msg.size();i++){	
-       				System.out.println(msg.elementAt(i));
-       			}
-       		}	
+
+    		else if (cb==userCombo)
+    		{	
+
+    			chattone.setDestName(userCombo.getSelectedItem().toString());
+    			StyledDocument doc = textPane.getStyledDocument();
+    			textPane.setText("");
+    			doc.setLogicalStyle(doc.getLength(), doc.getStyle("italic"));  
+    			String [] m;
+    			java.util.Vector <String[]> msg=chattone.getMSGFromChat();
+    			try {	
+    				for(int i=0;i<msg.size();i++){	
+    					m=msg.elementAt(i);
+    					if(m[0].contentEquals(usernameField.getText())) {
+    						doc.setLogicalStyle(doc.getLength(), doc.getStyle("bold"));
+    						doc.insertString(doc.getLength(), m[1]+"\n",doc.getStyle("bold"));
+    					}
+    					else
+    						doc.insertString(doc.getLength(), m[1]+"\n",doc.getStyle("italic"));
+    					doc.setLogicalStyle(doc.getLength(), doc.getStyle("italic"));  
+    					//       				System.out.println(m[1]);
+    				}
+    			} catch (BadLocationException ble) {
+
+    				System.err.println("Couldn't insert initial text into text pane.");
+    			}
+
+    		}	
        		
        	}
        	else if(MessagesBundle.GetResourceKey(pulsante).contentEquals("label_sound"))
@@ -525,7 +544,9 @@ public class cGUI extends JPanel  implements ActionListener{
     	}		
     	}
     }  
-    
+    /**
+	 * Metodo per la visualizzazione dei messaggi nella chat
+	 */
     private void sendMsg()
     {
     	
@@ -547,7 +568,10 @@ public class cGUI extends JPanel  implements ActionListener{
 
     	tareaIn.setText(""); 
 	}
-    
+    /**
+	 * Metodo che visualizza o nasconde il menu in base allo stato attuale della chat
+	 * @param status boolean
+	 */
     private void panelMenuSetStatus(boolean status)
     {
 //     	btnStart.setText(msgB.GetResourceValue("btn_start"));
@@ -555,7 +579,9 @@ public class cGUI extends JPanel  implements ActionListener{
     	boxCenter.setVisible(status);
     	boxALL.setVisible(!status);
 	}
-    
+    /**
+	 * Metodo che permette il cambio della lingua
+	 */
     private void chgLanguage()
     {
     	if(languageCombo.getSelectedItem().toString().equals("IT"))
@@ -563,7 +589,9 @@ public class cGUI extends JPanel  implements ActionListener{
     	else
     		msgB.SetLanguage("en", "US");
     } 
-    
+    /**
+	 * Metodo che imposta i componenti del menu' in base alla lingua scelta
+	 */
     private void buildComponent()
     {
     	isSetByProgram=true;
@@ -623,7 +651,9 @@ public class cGUI extends JPanel  implements ActionListener{
 
     	isSetByProgram=false;
     }
- 
+    /**
+	 * Metodo che imposta i componenti della listBox contenente i nomi degli utenti connessi
+	 */
     public void buildList() {
     	
     isSetByProgram=true;    	
