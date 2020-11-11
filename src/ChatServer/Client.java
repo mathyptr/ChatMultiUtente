@@ -130,7 +130,7 @@ public class Client {
 		 if(command.checkCMD(Message)==-1) { 
 			 String s=command.getDATA_CMD()+Message;
 			 outServer.println(s); // il messaggio viene mandato al server
-			 dbchat.insert(clientName, SR.getDest(), Message);
+			 dbchat.insert(clientName, SR.getDest(), SR.getDest(),Message);
 		  }
 		  else
 			outServer.println(Message);

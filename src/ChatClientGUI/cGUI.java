@@ -170,6 +170,7 @@ public class cGUI extends JPanel  implements ActionListener{
    	  	userCombo.addItem("all");
     	userCombo.setSelectedIndex(0);
     	isSetByProgram=false;
+    	chaton=false;
 	    buildComponent();
     }
     /**
@@ -495,17 +496,33 @@ public class cGUI extends JPanel  implements ActionListener{
     			textPane.setText("");
     			doc.setLogicalStyle(doc.getLength(), doc.getStyle("italic"));  
     			String [] m;
+    			String src,group,messaggio;
     			java.util.Vector <String[]> msg=chattone.getMSGFromChat();
     			try {	
     				for(int i=0;i<msg.size();i++){	
     					m=msg.elementAt(i);
-    					if(m[0].contentEquals(usernameField.getText())) {
+    	/*				if(m[0].contentEquals(usernameField.getText())) {
     						doc.setLogicalStyle(doc.getLength(), doc.getStyle("bold"));
-    						doc.insertString(doc.getLength(), m[1]+"\n",doc.getStyle("bold"));
+    						doc.insertString(doc.getLength(), m[3]+"\n",doc.getStyle("bold"));
     					}
     					else
-    						doc.insertString(doc.getLength(), m[1]+"\n",doc.getStyle("italic"));
+    						doc.insertString(doc.getLength(),m[1]+":"+ m[3]+"\n",doc.getStyle("italic"));
+    					doc.setLogicalStyle(doc.getLength(), doc.getStyle("italic"));  */
+    					src=m[0];
+    					group=m[2];
+    					if(usernameField.getText().contentEquals(src))
+    					{
+    						doc.setLogicalStyle(doc.getLength(), doc.getStyle("bold"));
+    						doc.insertString(doc.getLength(), messaggio= m[3]+"\n",doc.getStyle("bold"));
+    					}    						
+    					else if(group.equalsIgnoreCase("ALL"))
+    						doc.insertString(doc.getLength(),m[0]+":"+ m[3]+"\n",doc.getStyle("italic"));
+    					else
+    						doc.insertString(doc.getLength(),m[3]+"\n",doc.getStyle("italic"));
+ 	   		
     					doc.setLogicalStyle(doc.getLength(), doc.getStyle("italic"));  
+    											  					
+    					
     					//       				System.out.println(m[1]);
     				}
     			} catch (BadLocationException ble) {
@@ -518,7 +535,9 @@ public class cGUI extends JPanel  implements ActionListener{
        	}
        	else if(MessagesBundle.GetResourceKey(pulsante).contentEquals("label_sound"))
        	{	
-       		btnStart.setText(msgB.GetResourceValue("btn_send"));
+//!!!!!!!!!!!
+//!!!!!!!!!!!       		
+//!!!!!!!!!!!!!       		btnStart.setText(msgB.GetResourceValue("btn_send"));
        		boolean s=soundCheckBox.isSelected();
        		if(s) {
        			soundON=s;

@@ -126,13 +126,23 @@ public ThreadClient (BufferedReader inputServer, String clientName, SharedRegion
 		// TODO Auto-generated method stub
 		String data=command.getDataCMD(clientData);	
 		 String src = data.substring(0, data.indexOf(":"));
-		 String mes=data.substring(data.indexOf(":")+1, data.length());
-		 dbchat.insert( src,clientName, src+": "+mes);
-		 if(SR.getDest().equalsIgnoreCase(src)||SR.getDest().equalsIgnoreCase("all"))
+//10112020		 String mes=data.substring(data.indexOf(":")+1, data.length());
+		 String pack1 =data.substring(data.indexOf(":")+1, data.length());;
+		 String group=pack1.substring(0, pack1.indexOf(":"));
+		 String mes=pack1.substring(pack1.indexOf(":")+1, pack1.length());
+		 
+//11112020		 dbchat.insert( src,clientName,group, src+": "+mes);
+		 dbchat.insert( src,clientName,group,mes);
+		 if((SR.getDest().equalsIgnoreCase(src)&&group.equalsIgnoreCase(clientName))||SR.getDest().equalsIgnoreCase("all"))
 		 {
 			 if(type.equalsIgnoreCase("cmd"))
-				 System.out.print("--> ");
-			 System.out.println(src+": "+mes);
+				 System.out.println("--> "+src+": "+mes);
+			 else if (SR.getDest().equalsIgnoreCase("all"))
+				 System.out.println(src+": "+mes);
+			 else
+				 System.out.println(mes);
+			 
+//11112020			 System.out.println(src+": "+mes);
 		 }
 		 else
 			 sendInfoInStatus(src+": "+mes);

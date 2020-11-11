@@ -97,7 +97,7 @@ public class ThreadServer extends Thread{
 		
 		case 2 : //comando data: restiamo nella fase goChat
 			if(status.equalsIgnoreCase("goChat"))
-				Send(command.getDATA_CMD()+clientName + ": "+command.getDataCMD(clientData));
+				Send(command.getDATA_CMD()+clientName + ":"+currentDest+ ":"+command.getDataCMD(clientData));
 			else
 					SendMSG("Impossibile iniziare la chat");
 			break;
