@@ -1,5 +1,6 @@
 package ChatServer;
 import java.io.BufferedReader;
+import java.util.Calendar;
 import java.util.StringTokenizer;
 
 
@@ -34,7 +35,7 @@ public ThreadClient (BufferedReader inputServer, String clientName, SharedRegion
 	command= new CmdUtil();
 	list=new 	java.util.Vector <String>(1,1);
 	dbchat=new DBManager();
-	msgB.SetLanguage("it", "IT");
+//	msgB.SetLanguage("it", "IT");
 }
 
 	/**
@@ -58,6 +59,11 @@ public ThreadClient (BufferedReader inputServer, String clientName, SharedRegion
 			}
 		}
 	}
+
+	public void setLanguage(MessagesBundle msgB)
+	{
+		this.msgB=msgB;
+	}	
 	/**
 	 * metodo per la memorizzazione del messaggio del server
 	 * @param s String
@@ -141,7 +147,8 @@ public ThreadClient (BufferedReader inputServer, String clientName, SharedRegion
 				 System.out.println(src+": "+mes);
 			 else
 				 System.out.println(mes);
-			 
+			 Calendar now = Calendar.getInstance();
+			 System.out.println(now.get(Calendar.HOUR)+":"+now.get(Calendar.MINUTE)+"\n");                		 
 //11112020			 System.out.println(src+": "+mes);
 		 }
 		 else

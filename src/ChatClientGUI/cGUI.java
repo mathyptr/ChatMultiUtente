@@ -26,6 +26,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -110,6 +111,9 @@ public class cGUI extends JPanel  implements ActionListener{
 
 	private Box boxUpper;
 	private Box boxCenter;
+	private Box boxCenter1;
+	private Box boxCenterIN;
+	private Box boxCenterOUT;
 	private Box boxBottom;
 	private Box boxALL;
 	private Box boxStatus;
@@ -230,7 +234,6 @@ public class cGUI extends JPanel  implements ActionListener{
    	   Box boxUpper2 = Box.createVerticalBox();
    	   Box boxUpper3 = Box.createVerticalBox();
      
-       
        boxUpper1.add(addressLabel);       
        boxUpper1.add(userCombo);
        //boxUpper1.add(Box.createVerticalStrut(10));
@@ -244,7 +247,7 @@ public class cGUI extends JPanel  implements ActionListener{
        boxUpper2.add(usernameField);  
 //       boxUpper2.add(Box.createHorizontalStrut(20));
         boxUpper3.add(soundCheckBox);
-        
+   
  /*      boxUpper.add(Box.createHorizontalStrut(100));
        boxUpper.add(boxUpper1);
        boxUpper.add(Box.createHorizontalStrut(100));
@@ -258,11 +261,12 @@ public class cGUI extends JPanel  implements ActionListener{
       	panOpt.setBorder(new TitledBorder(new EtchedBorder(),""));
       	panOpt.add(boxUpper3,BorderLayout.CENTER);
 
+        boxUpper.add(Box.createHorizontalStrut(20));       //111120	
       	boxUpper.add(panHorse);
 //      	boxUpper.add(Box.createHorizontalStrut(5));        		
     	boxUpper.add(panHorseOpt); 
        	boxUpper.add(panOpt);              
-     
+        boxUpper.add(Box.createHorizontalStrut(20));   //111120
        
  //      Box boxVerticalLeft = Box.createVerticalBox();  
 //        Box boxVerticalRight = Box.createVerticalBox();
@@ -285,22 +289,59 @@ public class cGUI extends JPanel  implements ActionListener{
  //      scrollpOut.setMinimumSize(new Dimension(10, 10));   
  	tareaIn = new JTextArea(5, 5);  
     JScrollPane scrollpIn = new JScrollPane(tareaIn);      
-       
+    scrollpIn.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
      //0311       
-//  	boxCenter = Box.createHorizontalBox();
+    
+    
+    boxCenterIN = Box.createVerticalBox();//121220
+    boxCenterOUT = Box.createVerticalBox();//121220
+    boxCenterIN.add(scrollpIn);  //121220
+   	boxCenterOUT.add(scrollpOut);//121220
+    
+
     	boxCenter = Box.createVerticalBox();
+    	
+    	//121220
+        Border border;
+        Border blackline, raisedetched, loweredetched,    raisedbevel = null, loweredbevel = null, empty;
+    blackline =  BorderFactory.createLineBorder(Color.black);
+    raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+    loweredetched = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
+    raisedbevel = BorderFactory.createRaisedBevelBorder();
+    loweredbevel = BorderFactory.createLoweredBevelBorder();    
+        border = BorderFactory.createCompoundBorder(raisedetched, loweredetched);
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setBorder(border);
+       
+//        boxCenter.setBorder(border);
+        boxCenterIN.setBorder(border);
+        boxCenterOUT.setBorder(border);
+      //121220  	
+    	
+    	
+    	
+    
     	boxCenter.add(Box.createVerticalStrut(10));
      	boxCenter.add(Box.createHorizontalStrut(B_WIDTH/10));
-     	boxCenter.add(scrollpOut);
+     	//121220     	boxCenter.add(scrollpOut);
+     	boxCenter.add(boxCenterOUT);
     	boxCenter.add(Box.createHorizontalStrut(B_WIDTH/10));
    	
          
       	boxCenter.add(Box.createHorizontalStrut(B_WIDTH/10));
-       	boxCenter.add(scrollpIn);
+      //121220        	boxCenter.add(scrollpIn);
+       	boxCenter.add(boxCenterIN);
     	boxCenter.add(Box.createHorizontalStrut(B_WIDTH/10));
     	
     	boxCenter.add(Box.createVerticalStrut(10));
     	
+    	boxCenter1= Box.createHorizontalBox();
+     	
+    	
+    	
+    	boxCenter1.add(Box.createHorizontalStrut(20)); //111120
+    	boxCenter1.add(boxCenter);
+    	boxCenter1.add(Box.createHorizontalStrut(20)); //111120
  //!!!!!!    	boxCenter.setSize(100, 100);
    
       	panButtonStart.add(btnStart);//3005
@@ -329,7 +370,8 @@ public class cGUI extends JPanel  implements ActionListener{
         this.add(boxUpper); 
         this.add(Box.createVerticalStrut(10));
 
-        this.add(boxCenter); 
+  //111120      this.add(boxCenter); 
+        this.add(boxCenter1);
        this.add(Box.createVerticalStrut(10));//3005
        
         this.add(boxBottom);    
@@ -363,13 +405,37 @@ public class cGUI extends JPanel  implements ActionListener{
     	Style regular = doc.addStyle("regular", def);
     	StyleConstants.setFontFamily(def, "SansSerif");
 
+    	Style s1 = doc.addStyle("center", regular);
+    	StyleConstants.setAlignment(s1, StyleConstants.ALIGN_CENTER);
+    	StyleConstants.setBackground(s1, new Color(255, 255, 179));    	
+    	s1.addAttribute(StyleConstants.SpaceBelow,Float.valueOf(tp.getFont().getSize()/2.0f));
+ 
+    	Style s2 = doc.addStyle("timeReceive", regular);
+ //    	s2.addAttribute(StyleConstants.SpaceAbove,Float.valueOf(tp.getFont().getSize()/5.0f));    	
+    	StyleConstants.setBackground(s2, new Color(108, 251, 175));    	
+  //  	StyleConstants.setFontSize(s2,tp.getFont().getSize()/2);
+    	StyleConstants.setFontSize(s2,10);
+  
+    	Style s3 = doc.addStyle("timeSend", regular);
+ //    	s3.addAttribute(StyleConstants.SpaceAbove,Float.valueOf(tp.getFont().getSize()/5.0f));
+    	StyleConstants.setAlignment(s3, StyleConstants.ALIGN_RIGHT);
+    	StyleConstants.setBackground(s3, new Color(204, 230, 255));   
+    	StyleConstants.setForeground(s3, Color.BLUE);
+ //   	StyleConstants.setFontSize(s3,tp.getFont().getSize()/2);
+    	StyleConstants.setFontSize(s3,10);	
+    	
     	Style s = doc.addStyle("italic", regular);
     	StyleConstants.setItalic(s, true);
 
     	Style sR = doc.addStyle("italic", regular);
+    	sR.addAttribute(StyleConstants.SpaceAbove,Float.valueOf(tp.getFont().getSize()/2.0f));
+    	StyleConstants.setBackground(sR, new Color(108, 251, 175));
+    	
     	sR = doc.addStyle("bold", regular);
     	StyleConstants.setBold(sR, true);
     	StyleConstants.setAlignment(sR, StyleConstants.ALIGN_RIGHT);
+    	sR.addAttribute(StyleConstants.SpaceAbove,Float.valueOf(tp.getFont().getSize()/2.0f));    	
+    	StyleConstants.setBackground(sR, new Color(204, 230, 255));
     	StyleConstants.setForeground(sR, Color.BLUE);
     	//      textPane.setParagraphAttributes(sR, true);
 
@@ -414,12 +480,24 @@ public class cGUI extends JPanel  implements ActionListener{
     private void startChat()
     { 
     	chattone = new Client(msgB.GetResourceValue("server_name"), Integer.valueOf(msgB.GetResourceValue("server_port")), usernameField.getText());
+	
+    	if(languageCombo.getSelectedItem().toString().equals("IT")) 
+    		chattone.setLanguage("it", "IT");   	
+    	else if(languageCombo.getSelectedItem().toString().equals("EN")) 
+    		chattone.setLanguage("en", "US"); 	
+    	else if(languageCombo.getSelectedItem().toString().equals("FR")) 
+    		chattone.setLanguage("fr", "FR");
+    	else if(languageCombo.getSelectedItem().toString().equals("ES")) 
+    		chattone.setLanguage("es", "ES");   
+    	else if(languageCombo.getSelectedItem().toString().equals("DE")) 
+    		chattone.setLanguage("de", "DE");	
+    	
 		try {
 			chattone.StartG();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}	
 		
 		chattone.SendListCMD();
    		chattone.setDestName("all");
@@ -496,7 +574,7 @@ public class cGUI extends JPanel  implements ActionListener{
     			textPane.setText("");
     			doc.setLogicalStyle(doc.getLength(), doc.getStyle("italic"));  
     			String [] m;
-    			String src,group,messaggio;
+    			String src,group,messaggio,datemsg="1900-01-01";
     			java.util.Vector <String[]> msg=chattone.getMSGFromChat();
     			try {	
     				for(int i=0;i<msg.size();i++){	
@@ -508,18 +586,34 @@ public class cGUI extends JPanel  implements ActionListener{
     					else
     						doc.insertString(doc.getLength(),m[1]+":"+ m[3]+"\n",doc.getStyle("italic"));
     					doc.setLogicalStyle(doc.getLength(), doc.getStyle("italic"));  */
+    					if(!datemsg.equals(m[4]))//visualizza la data se questa e' diversa rispetto al messaggio precedente
+    					{
+    						datemsg=m[4];
+    						doc.setLogicalStyle(doc.getLength(), doc.getStyle("center"));
+    						doc.insertString(doc.getLength(),m[4]+"\n",doc.getStyle("center"));
+        					doc.setLogicalStyle(doc.getLength(), doc.getStyle("italic"));      						
+    					}
     					src=m[0];
     					group=m[2];
     					if(usernameField.getText().contentEquals(src))
     					{
     						doc.setLogicalStyle(doc.getLength(), doc.getStyle("bold"));
     						doc.insertString(doc.getLength(), messaggio= m[3]+"\n",doc.getStyle("bold"));
+    						doc.setLogicalStyle(doc.getLength(), doc.getStyle("timeSend"));    						
+    						doc.insertString(doc.getLength(), messaggio= m[5]+"\n",doc.getStyle("timeSend"));
     					}    						
     					else if(group.equalsIgnoreCase("ALL"))
+    					{
     						doc.insertString(doc.getLength(),m[0]+":"+ m[3]+"\n",doc.getStyle("italic"));
+    						doc.setLogicalStyle(doc.getLength(), doc.getStyle("timeReceive"));  
+      						doc.insertString(doc.getLength(), messaggio= m[5]+"\n",doc.getStyle("timeReceive"));
+    					}
     					else
+    					{
     						doc.insertString(doc.getLength(),m[3]+"\n",doc.getStyle("italic"));
- 	   		
+    						doc.setLogicalStyle(doc.getLength(), doc.getStyle("timeReceive"));    						
+      						doc.insertString(doc.getLength(), messaggio= m[5]+"\n",doc.getStyle("timeReceive"));
+    					}
     					doc.setLogicalStyle(doc.getLength(), doc.getStyle("italic"));  
     											  					
     					
@@ -577,10 +671,14 @@ public class cGUI extends JPanel  implements ActionListener{
      doc.setLogicalStyle(doc.getLength(), doc.getStyle("bold"));
         try {
                 doc.insertString(doc.getLength(), d+"\n",doc.getStyle("bold"));
+                doc.setLogicalStyle(doc.getLength(), doc.getStyle("timeSend"));
+                Calendar now = Calendar.getInstance();
+        		doc.insertString(doc.getLength(), now.get(Calendar.HOUR)+":"+now.get(Calendar.MINUTE)+"\n",doc.getStyle("timeSend"));                
         } catch (BadLocationException ble) {
     
-            System.err.println("Couldn't insert initial text into text pane.");
-        }
+        System.err.println("Couldn't insert initial text into text pane.");
+    }
+        
 //0311    	
         doc.setLogicalStyle(doc.getLength(), doc.getStyle("italic"));
         
@@ -603,10 +701,16 @@ public class cGUI extends JPanel  implements ActionListener{
 	 */
     private void chgLanguage()
     {
-    	if(languageCombo.getSelectedItem().toString().equals("IT"))
-    		msgB.SetLanguage("it", "IT");   	     
-    	else
-    		msgB.SetLanguage("en", "US");
+    	if(languageCombo.getSelectedItem().toString().equals("IT")) 
+    		msgB.SetLanguage("it", "IT");   	
+    	else if(languageCombo.getSelectedItem().toString().equals("EN")) 
+    		msgB.SetLanguage("en", "US"); 	
+    	else if(languageCombo.getSelectedItem().toString().equals("FR")) 
+    		msgB.SetLanguage("fr", "FR");
+    	else if(languageCombo.getSelectedItem().toString().equals("ES")) 
+    		msgB.SetLanguage("es", "ES");   
+    	else if(languageCombo.getSelectedItem().toString().equals("DE")) 
+    		msgB.SetLanguage("de", "DE");	
     } 
     /**
 	 * Metodo che imposta i componenti del menu' in base alla lingua scelta
@@ -641,12 +745,21 @@ public class cGUI extends JPanel  implements ActionListener{
         bkgCombo.addItem(msgB.GetResourceValue("bkg_railroad")); 
         */
         languageCombo.addItem("IT");
-        languageCombo.addItem("EN");          
+        languageCombo.addItem("EN");
+        languageCombo.addItem("FR");
+        languageCombo.addItem("ES");
+        languageCombo.addItem("DE");
         if(lan!=null) {
         	if(lan.equals("IT"))
         		languageCombo.setSelectedIndex(0);
-        	else
+        	else if(lan.equals("EN"))
         		languageCombo.setSelectedIndex(1);
+        	else if(lan.equals("FR"))
+        		languageCombo.setSelectedIndex(2);        	
+        	else if(lan.equals("ES"))
+        		languageCombo.setSelectedIndex(3);    
+        	else if(lan.equals("DE"))
+        		languageCombo.setSelectedIndex(4);  
     	}
         else
         		languageCombo.setSelectedIndex(0);

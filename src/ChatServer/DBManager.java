@@ -62,7 +62,7 @@ public class DBManager {
     public java.util.Vector <String[]> msgFromChat(String dest,String source) {
 //    	 String sql = "SELECT source,dest,groupm,mess FROM messages where (source='"+source+"' and groupm='"+dest+"') or  (source='"+dest+"' and groupm='"+dest+"') order by insert_at";
 //   	 	 String sql = "SELECT source,dest,groupm,mess FROM messages where groupm='"+dest+"' order by insert_at";
-    	String sql ="select source,dest,mess,groupm from messages where  (source='"+source+"' and groupm='"+dest+"') or  (source='"+dest+"' and groupm='"+source+"') or (dest='"+source+"' and groupm='"+dest+"') order by insert_at"; 
+    	String sql ="select source,dest,mess,groupm,strftime('%d-%m-%Y', insert_at),strftime('%H:%M', insert_at) from messages where  (source='"+source+"' and groupm='"+dest+"') or  (source='"+dest+"' and groupm='"+source+"') or (dest='"+source+"' and groupm='"+dest+"') order by insert_at"; 
 
     	 java.util.Vector <String[]> msg=new java.util.Vector <String[]>(1,1);
     	 String[] row;
@@ -71,11 +71,13 @@ public class DBManager {
         Statement stmt  = conn.createStatement();
      	ResultSet rs    = stmt.executeQuery(sql);
              while (rs.next()) {
-               row= new String[4];
+               row= new String[6];
                row[0]=rs.getString("source");
                row[1]=rs.getString("dest");     
                row[2]=rs.getString("groupm");
-               row[3]=rs.getString("mess");               
+               row[3]=rs.getString("mess"); 
+               row[4]=rs.getString("strftime('%d-%m-%Y', insert_at)");
+               row[5]=rs.getString("strftime('%H:%M', insert_at)");               
                msg.add(row);
              }
     } catch (SQLException e) {

@@ -21,7 +21,7 @@ public class Client {
 	CmdUtil command;
   	DBManager dbchat = null;
  	String type="cmd";
-    MessagesBundle msgB= new MessagesBundle();
+ 	MessagesBundle msgB= new MessagesBundle();
 	/**
 	 * Costruttore della classe Client
 	 * 
@@ -47,7 +47,8 @@ public class Client {
 	public void setLanguage(String language, String country)
 	{
 		msgB.SetLanguage(language, country);
-	
+		if(thC!=null)
+			thC.setLanguage(msgB);
 	}
 	/**
 	 * Metodo che permette la connessione con il server
@@ -84,6 +85,7 @@ public class Client {
 		Connect(type);
 		thC = new ThreadClient(inputServer, clientName, SR, "cmd",msgB); // viene creato e fatto partire un ThreadClient
 		thC.start();
+//		thC.setLanguage(msgB., country);
 		hello(); // prima di poter inviare i dati il client deve dire il proprio nome
 		setDestName("all");
 		String Message;
