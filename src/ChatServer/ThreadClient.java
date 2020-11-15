@@ -142,7 +142,7 @@ public ThreadClient (BufferedReader inputServer, String clientName, SharedRegion
 		 
 //11112020		 dbchat.insert( src,clientName,group, src+": "+mes);
 		 dbchat.insert( src,clientName,group,mes);
-		 if((SR.getDest().equalsIgnoreCase(src)&&group.equalsIgnoreCase(clientName))||SR.getDest().equalsIgnoreCase("all"))
+		 if((SR.getDest().equalsIgnoreCase(src)&&group.equalsIgnoreCase(clientName))||(SR.getDest().equalsIgnoreCase("all")&&group.equalsIgnoreCase("all")))
 		 {
 			 if(type.equalsIgnoreCase("cmd"))
 				 System.out.println("--> "+src+": "+mes);
