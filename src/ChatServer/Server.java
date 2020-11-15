@@ -1,6 +1,12 @@
 package ChatServer;
 import java.io.*;
 import java.net.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Timer;
+import java.util.TimerTask;
+
+
 
 /**
  * Classe per l'implementazione di un Server per gestire una Chat La classe
@@ -14,7 +20,8 @@ import java.net.*;
 public class Server {
 	ServerSocket server;
 	java.util.Vector<Thread> ThreadVect;
-
+    
+	
 	/**
 	 * Costruttore della classe Server
 	 * 
@@ -33,6 +40,8 @@ public class Server {
 	 * Metodo per la creazione e la gestione dei thread server
 	 */
 	public void Start() {
+
+			
 		Socket clientSocket;
 		System.out.println(".....in attesa di dati.");
 		while (true) {
@@ -64,4 +73,7 @@ public class Server {
 				ThreadVect.removeElementAt(i);
 		}
 	}
+	
+ 
+	
 }

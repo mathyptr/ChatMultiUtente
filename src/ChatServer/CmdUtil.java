@@ -10,6 +10,7 @@ public class CmdUtil {
 	String DATA_CMD="data:";
 	String SETDEST_CMD="dest:";
 	String LIST_CMD="list";
+	String STATUS_RESP="status";//1411
 	String status="initChat";
 	java.util.Vector <String> CMD=new java.util.Vector <String> (1,1);
 	
@@ -21,6 +22,7 @@ public class CmdUtil {
 	CMD.add(DATA_CMD);
 	CMD.add(SETDEST_CMD);
 	CMD.add(LIST_CMD);
+	CMD.add(STATUS_RESP);//1411
 	}
 	 /**
 		 * Metodo che permette di individuare il comando richiesto
@@ -76,5 +78,19 @@ public class CmdUtil {
 	 */
 	public String getSETDST_CMD() {
 		return SETDEST_CMD;
+	}
+	/**
+	 * Metodo che restituisce il comando per uscire
+	 * @return il comando per uscire
+	 */
+	public String getQUIT_CMD() {
+		return QUIT_CMD;
+	}
+	/**
+	 * Metodo che restituisce il comando di stato
+	 * @return il comando di stato
+	 */
+	public String getSTATUS_RESP() {
+		return STATUS_RESP;
 	}
 }

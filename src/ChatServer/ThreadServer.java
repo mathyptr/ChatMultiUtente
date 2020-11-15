@@ -1,6 +1,8 @@
 package ChatServer;
 import java.io.*;
 import java.net.Socket;
+import java.time.LocalDateTime;
+import java.util.Calendar;
 
 
 /**
@@ -24,6 +26,7 @@ public class ThreadServer extends Thread{
 	java.util.Vector <String> CMD=new java.util.Vector <String> (1,1);
 	java.util.Vector <Thread> ThreadVect;
 	CmdUtil command;
+	LocalDateTime  lastListcmd=LocalDateTime.now();
 //    MessagesBundle msgB= new MessagesBundle();
 	/**
 	 * Costruttore della classe ThreadServer
@@ -55,8 +58,8 @@ public class ThreadServer extends Thread{
 		try {
 			clientData = inputClient.readLine(); // lettura del messaggio del client
 		} catch (Exception e) {
-			SendMSG("Il server risponde: errore lettura da client");
-			System.out.println("errore lettura da client");
+			SendMSG("errorsrv_readfromclient_msg");
+			System.out.println("errorsrv_readfromclient_msg");
 			end=true;
 			break;
 		}
@@ -64,8 +67,8 @@ public class ThreadServer extends Thread{
 		 if(cmd!=-1)
 		  end=DecEndExec(command.checkCMD(clientData),clientData);
 		else {
-			SendMSG("Il server risponde: errore comando");
-			System.out.println("errore comando");
+			SendMSG("errorsrv_cmd_msg");
+			System.out.println("errorsrv_cmd_msg");
 		}
 		}
 	}
@@ -90,8 +93,8 @@ public class ThreadServer extends Thread{
 		
 		case 1: //comando quit: dalla fase goChat entriamo nella fase stopChat
 		     status="stopChat";
-		     SendMSG("Arrivederci " + clientName);
-			 SendToOther(clientName+" si e' disconnesso");
+		     SendMSG(command.getQUIT_CMD()+"bye_msg");
+		     SendToAll(command.getSTATUS_RESP()+clientName+" si e' disconnesso");
 			 end=true;
 			break;
 		
@@ -116,6 +119,7 @@ public class ThreadServer extends Thread{
 			System.out.println("Errore" + "\n"); 
 		
 		}
+		lastListcmd=LocalDateTime.now();
 		return end; //viene restituito true quando si desidera uscire dalla chat
 	}
 		
@@ -213,5 +217,8 @@ public class ThreadServer extends Thread{
 			if(((ThreadServer) ThreadVect.elementAt(i)).isAlive())
 			 list=list+((ThreadServer) ThreadVect.elementAt(i)).getClientName()+"|";
 		return list;
+	}
+	public LocalDateTime getlastListcmd() {
+		return lastListcmd;
 	}
 }

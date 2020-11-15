@@ -83,24 +83,23 @@ public class cGUI extends JPanel  implements ActionListener{
     private final int B_HEIGHT = 625;
 
     private final int INITIAL_DELAY = 2000;
-    private final int PERIOD_INTERVAL = 5000;
-	
+    private final int PERIOD_INTERVAL = 2000;
+    private final int PERIOD_INTERVAL_LIST = 3*PERIOD_INTERVAL;
+    private int tickTimeForList=PERIOD_INTERVAL;
 
     private boolean chaton=false;
     private boolean soundON=true;
     private Timer timer;
-    private int x, y;
+ 
+//    private int x, y;
     MessagesBundle msgB= new MessagesBundle();
     boolean isSetByProgram=false;
     Clip clipMenu;
-    Clip clipRace;
-    Clip clipWin; 
-	private JPanel panHorse= new JPanel();
-	private JPanel panHorseOpt= new JPanel();
-	private JPanel panOpt= new JPanel();
-	private JPanel panHorseImg= new JPanel();
-	private JPanel panHorseImgRight= new JPanel();
-	private JPanel panHorseImgLeft= new JPanel();
+
+	private JPanel panUpLeft= new JPanel();
+	private JPanel panUpCenter= new JPanel();
+	private JPanel panUpRight= new JPanel();
+
 	private JPanel panButtonStart= new JPanel();
 	
 	private JTextField usernameField = new JTextField("",2);
@@ -140,15 +139,8 @@ public class cGUI extends JPanel  implements ActionListener{
     	try {     
  	         AudioInputStream audioIn = AudioSystem.getAudioInputStream(new BufferedInputStream(getClass().getResourceAsStream("/music/Menu.wav")));
  	         clipMenu = AudioSystem.getClip();
- 	         clipMenu.open(audioIn);
- 	      	 
-  	      	 audioIn = AudioSystem.getAudioInputStream(new BufferedInputStream(getClass().getResourceAsStream("/music/galoppata.wav")));
- 	         clipRace = AudioSystem.getClip();
-  	      	 clipRace.open(audioIn);
- 	  		
-	         audioIn = AudioSystem.getAudioInputStream(new BufferedInputStream(getClass().getResourceAsStream("/music/applausi.wav")));
- 	         clipWin = AudioSystem.getClip();
-  	      	 clipWin.open(audioIn);  	        	         
+ 	         clipMenu.open(audioIn);    	 
+  
   		}
  	    catch (Exception e){
  		   System.out.println("errore on sound: "+e.toString());
@@ -190,42 +182,25 @@ public class cGUI extends JPanel  implements ActionListener{
     private void Menu() {  	
      	
     	btnStart = new JButton();
-    	
- /*   	btnStart.setOpaque(false);
-    	btnStart.setFocusPainted(false);
-    	btnStart.setBorderPainted(false);
-    	btnStart.setContentAreaFilled(false);
-    	btnStart.setForeground(Color.BLUE);*/
- //   	setBorder(BorderFactory.createEmptyBorder(0,0,0,0)); 
-  //  	btnStart.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
-    	//btnStart.setForeground(Color.BLUE);
-  /*  	btnStart.setBorderPainted(false);
-    	btnStart.setFocusPainted(false);
-    	btnStart.setContentAreaFilled(false);*/
- //   	btnStart.setBounds(10,40,50,20);
-  //  	btnStart.setBorder(new Border(10));
-    	
+
+  	
     	Border edge=BorderFactory.createRaisedBevelBorder();
     	Dimension size = new Dimension(100,60);
-   //3005   	btnStart.setBorder(edge);
-  //3005   	btnStart.setPreferredSize(size);
- soundCheckBox.setSelected (true);
+    	soundCheckBox.setSelected (true);
  
  
 
  		size = new Dimension(80,20);
- 		addressLabel.setPreferredSize(size);  //3005     
- 		userCombo.setPreferredSize(size);  //3005
- //		percorsoLabel.setPreferredSize(size);  //3005       
- //		bkgCombo.setPreferredSize(size);  //3005          
- 		languageLabel.setPreferredSize(size);  //3005
- 		languageCombo.setPreferredSize(size);  //3005
- 		usernameLabel.setPreferredSize(size);  //3005;
- 		usernameField.setPreferredSize(size);  //3005  
- 		soundCheckBox.setPreferredSize(size);  //3005
+ 		addressLabel.setPreferredSize(size);    
+ 		userCombo.setPreferredSize(size);        
+ 		languageLabel.setPreferredSize(size);  
+ 		languageCombo.setPreferredSize(size); 
+ 		usernameLabel.setPreferredSize(size);  
+ 		usernameField.setPreferredSize(size);  
+ 		soundCheckBox.setPreferredSize(size);  
 
  		statusLabel.setPreferredSize(new Dimension(B_WIDTH, 20));  
- 		statusLabel.setText("-------------------Mathy");
+ 		statusLabel.setText("------------------------");
        setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
            
 
@@ -236,158 +211,113 @@ public class cGUI extends JPanel  implements ActionListener{
      
        boxUpper1.add(addressLabel);       
        boxUpper1.add(userCombo);
-       //boxUpper1.add(Box.createVerticalStrut(10));
- //      boxUpper1.add(percorsoLabel);       
- //      boxUpper1.add(bkgCombo);          
-//       boxUpper1.add(Box.createHorizontalStrut(20));  
        boxUpper2.add(languageLabel);
        boxUpper2.add(languageCombo);
-       //boxUpper2.add(Box.createVerticalStrut(10));
        boxUpper2.add(usernameLabel);
        boxUpper2.add(usernameField);  
-//       boxUpper2.add(Box.createHorizontalStrut(20));
-        boxUpper3.add(soundCheckBox);
+       boxUpper3.add(soundCheckBox);
    
- /*      boxUpper.add(Box.createHorizontalStrut(100));
-       boxUpper.add(boxUpper1);
-       boxUpper.add(Box.createHorizontalStrut(100));
-       boxUpper.add(boxUpper2);
-       boxUpper.add(Box.createHorizontalStrut(150));
-   */    
-      	panHorse.setBorder(new TitledBorder(new EtchedBorder(),""));
-      	panHorse.add(boxUpper1,BorderLayout.CENTER);
-      	panHorseOpt.setBorder(new TitledBorder(new EtchedBorder(),""));
-      	panHorseOpt.add(boxUpper2,BorderLayout.CENTER);
-      	panOpt.setBorder(new TitledBorder(new EtchedBorder(),""));
-      	panOpt.add(boxUpper3,BorderLayout.CENTER);
+  
+        panUpLeft.setBorder(new TitledBorder(new EtchedBorder(),""));
+        panUpLeft.add(boxUpper1,BorderLayout.CENTER);
+        panUpCenter.setBorder(new TitledBorder(new EtchedBorder(),""));
+        panUpCenter.add(boxUpper2,BorderLayout.CENTER);
+        panUpRight.setBorder(new TitledBorder(new EtchedBorder(),""));
+        panUpRight.add(boxUpper3,BorderLayout.CENTER);
 
         boxUpper.add(Box.createHorizontalStrut(20));       //111120	
-      	boxUpper.add(panHorse);
-//      	boxUpper.add(Box.createHorizontalStrut(5));        		
-    	boxUpper.add(panHorseOpt); 
-       	boxUpper.add(panOpt);              
+      	boxUpper.add(panUpLeft); 		
+    	boxUpper.add(panUpCenter); 
+       	boxUpper.add(panUpRight);              
         boxUpper.add(Box.createHorizontalStrut(20));   //111120
        
- //      Box boxVerticalLeft = Box.createVerticalBox();  
-//        Box boxVerticalRight = Box.createVerticalBox();
+
         
        tareaOut = new JTextArea(70, 20);      
-       //0311      JScrollPane scrollpOut = new JScrollPane(tareaOut);      
-      //0311
        textPane = new JTextPane();
-       //textPane.setContentType("text/html");
-     //Initialize some styles.
        addStylesToTextPAne(textPane);
- //      textPane.setSize(10, 10);
-  //    textPane.setPreferredSize(new Dimension(10, 10));
- //         textPane.setBounds( 0, 0, 70, 20 );
+
        JScrollPane scrollpOut = new JScrollPane(textPane);
-
-//         scrollpOut.setLayout( null );
-//         scrollpOut.add( textPane );    
-     scrollpOut.setPreferredSize(new Dimension(20, 370));
- //      scrollpOut.setMinimumSize(new Dimension(10, 10));   
- 	tareaIn = new JTextArea(5, 5);  
-    JScrollPane scrollpIn = new JScrollPane(tareaIn);      
-    scrollpIn.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-     //0311       
+  
+       scrollpOut.setPreferredSize(new Dimension(20, 370));
+  
+       tareaIn = new JTextArea(5, 5);  
+       JScrollPane scrollpIn = new JScrollPane(tareaIn);      
+       scrollpIn.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
     
     
-    boxCenterIN = Box.createVerticalBox();//121220
-    boxCenterOUT = Box.createVerticalBox();//121220
-    boxCenterIN.add(scrollpIn);  //121220
-   	boxCenterOUT.add(scrollpOut);//121220
+       boxCenterIN = Box.createVerticalBox();
+       boxCenterOUT = Box.createVerticalBox();
+       boxCenterIN.add(scrollpIn);  
+       boxCenterOUT.add(scrollpOut);
     
 
-    	boxCenter = Box.createVerticalBox();
+       boxCenter = Box.createVerticalBox();
     	
-    	//121220
+ 
         Border border;
         Border blackline, raisedetched, loweredetched,    raisedbevel = null, loweredbevel = null, empty;
-    blackline =  BorderFactory.createLineBorder(Color.black);
-    raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
-    loweredetched = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
-    raisedbevel = BorderFactory.createRaisedBevelBorder();
-    loweredbevel = BorderFactory.createLoweredBevelBorder();    
+        blackline =  BorderFactory.createLineBorder(Color.black);
+        raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+        loweredetched = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
+        raisedbevel = BorderFactory.createRaisedBevelBorder();
+        loweredbevel = BorderFactory.createLoweredBevelBorder();    
         border = BorderFactory.createCompoundBorder(raisedetched, loweredetched);
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(border);
        
-//        boxCenter.setBorder(border);
         boxCenterIN.setBorder(border);
         boxCenterOUT.setBorder(border);
-      //121220  	
-    	
-    	
-    	
-    
+     
     	boxCenter.add(Box.createVerticalStrut(10));
      	boxCenter.add(Box.createHorizontalStrut(B_WIDTH/10));
-     	//121220     	boxCenter.add(scrollpOut);
      	boxCenter.add(boxCenterOUT);
-    	boxCenter.add(Box.createHorizontalStrut(B_WIDTH/10));
-   	
-         
+    	boxCenter.add(Box.createHorizontalStrut(B_WIDTH/10));         
       	boxCenter.add(Box.createHorizontalStrut(B_WIDTH/10));
-      //121220        	boxCenter.add(scrollpIn);
        	boxCenter.add(boxCenterIN);
-    	boxCenter.add(Box.createHorizontalStrut(B_WIDTH/10));
-    	
-    	boxCenter.add(Box.createVerticalStrut(10));
-    	
+    	boxCenter.add(Box.createHorizontalStrut(B_WIDTH/10));    	
+    	boxCenter.add(Box.createVerticalStrut(10));    	
     	boxCenter1= Box.createHorizontalBox();
      	
     	
     	
-    	boxCenter1.add(Box.createHorizontalStrut(20)); //111120
+    	boxCenter1.add(Box.createHorizontalStrut(20)); 
     	boxCenter1.add(boxCenter);
-    	boxCenter1.add(Box.createHorizontalStrut(20)); //111120
- //!!!!!!    	boxCenter.setSize(100, 100);
-   
-      	panButtonStart.add(btnStart);//3005
+    	boxCenter1.add(Box.createHorizontalStrut(20));
+      	panButtonStart.add(btnStart);
      	boxBottom = Box.createHorizontalBox();
   	
-     	boxBottom.add(Box.createHorizontalStrut(B_WIDTH/2-50)); //3005
-        boxBottom.add(panButtonStart);//3005
-       	boxBottom.add(Box.createHorizontalStrut(B_WIDTH/2-50)); //3005
+     	boxBottom.add(Box.createHorizontalStrut(B_WIDTH/2-50)); 
+        boxBottom.add(panButtonStart);
+       	boxBottom.add(Box.createHorizontalStrut(B_WIDTH/2-50));
         
      	boxALL= Box.createVerticalBox();
     	boxALL.add(Box.createVerticalStrut(B_HEIGHT));
     	
         BoxLayout box=new BoxLayout(this,BoxLayout.Y_AXIS);
-      this.setLayout(box);
+        this.setLayout(box);
  
-        boxBottom.setOpaque( false );//3005
-       
- /*       textPaneStatus = new JTextPane();
-        textPaneStatus.setSize(10, B_WIDTH);
-        JScrollPane scrollpStatus = new JScrollPane(textPaneStatus);  */  
+        boxBottom.setOpaque( false );  
         boxStatus = Box.createHorizontalBox();
         boxStatus.add(statusLabel); 
- //       boxStatus.add(scrollpStatus); 
         boxStatus.add(Box.createHorizontalStrut(B_WIDTH));
 
         this.add(boxUpper); 
         this.add(Box.createVerticalStrut(10));
-
-  //111120      this.add(boxCenter); 
         this.add(boxCenter1);
-       this.add(Box.createVerticalStrut(10));//3005
+        this.add(Box.createVerticalStrut(10));
        
         this.add(boxBottom);    
-    this.add(boxALL);
-    this.add(boxStatus);
-        this.setOpaque( false );//3005
-         
- //0111       buildComponent();
-   //     bkgCombo.addActionListener(this);     
+        this.add(boxALL);
+        this.add(boxStatus);
+        this.setOpaque( false );
+   
         userCombo.addActionListener(this);    
         languageCombo.addActionListener(this);
         btnStart.addActionListener(this);
         soundCheckBox.addActionListener(this);
-        
-        ClipSound(clipRace,false);
-        ClipSound(clipWin,false);
+
+      
         ClipSound(clipMenu,true);
      
       	
@@ -437,9 +367,7 @@ public class cGUI extends JPanel  implements ActionListener{
     	sR.addAttribute(StyleConstants.SpaceAbove,Float.valueOf(tp.getFont().getSize()/2.0f));    	
     	StyleConstants.setBackground(sR, new Color(204, 230, 255));
     	StyleConstants.setForeground(sR, Color.BLUE);
-    	//      textPane.setParagraphAttributes(sR, true);
-
-
+   
     	textPane.setParagraphAttributes(s, false);
 
     	s = doc.addStyle("small", regular);
@@ -474,23 +402,28 @@ public class cGUI extends JPanel  implements ActionListener{
     			clipsound.stop();
  
     }
+    
     /**
+     * 
+	 * Metodo che permette uscire dalla chat 
+	 */    
+    public void quitChat()
+    { 
+    	if(chaton) 
+    		chattone.quit();
+    	
+    }
+
+    
+    /**
+     * 
 	 * Metodo che permette l'inizio della chat inizializzando il client
 	 */
     private void startChat()
     { 
+    	    	
     	chattone = new Client(msgB.GetResourceValue("server_name"), Integer.valueOf(msgB.GetResourceValue("server_port")), usernameField.getText());
-	
-    	if(languageCombo.getSelectedItem().toString().equals("IT")) 
-    		chattone.setLanguage("it", "IT");   	
-    	else if(languageCombo.getSelectedItem().toString().equals("EN")) 
-    		chattone.setLanguage("en", "US"); 	
-    	else if(languageCombo.getSelectedItem().toString().equals("FR")) 
-    		chattone.setLanguage("fr", "FR");
-    	else if(languageCombo.getSelectedItem().toString().equals("ES")) 
-    		chattone.setLanguage("es", "ES");   
-    	else if(languageCombo.getSelectedItem().toString().equals("DE")) 
-    		chattone.setLanguage("de", "DE");	
+    	chgLanguage();
     	
 		try {
 			chattone.StartG();
@@ -504,32 +437,27 @@ public class cGUI extends JPanel  implements ActionListener{
     	
 		chattone.hello(usernameField.getText());
    		chaton=true;
- //  		String h="<html><head><style>.button {  background-color: #4CAF50;  border: none;  color: white;  padding: 20px;  text-align: center;  text-decoration: none;  display: inline-block;  font-size: 16px;  margin: 4px 2px;}.button1 {border-radius: 2px;}</style></head><button class='button button1'>"+msgB.GetResourceValue("btn_send")+"</button></html>";
-//   		btnStart.setText(h);   		
-//   		btnStart.setText("<html><i>"+msgB.GetResourceValue("btn_send")+"</i></html>");   
    		btnStart.setText(msgB.GetResourceValue("btn_send"));
    		usernameField.setEditable(false);
-/*   		java.util.Vector <String> v= chattone.getList( );
-   		int naddress=v.size();   
-   		for(int i=0;i<naddress;i++) {
-   			if (v.elementAt(i).equalsIgnoreCase("ALL"))
-         		userCombo.setSelectedIndex(i);
-   		}  */
-   		
 
    		panelMenuSetStatus(true);
-      	ClipSound(clipWin,false);
-        ClipSound(clipRace,false);
+
     	ClipSound(clipMenu,true); 
+    	populateTextPanMsg();
     	timer = new Timer();
     	timer.scheduleAtFixedRate(new ScheduleTask(),INITIAL_DELAY, PERIOD_INTERVAL);
 	}
+    
     private class ScheduleTask extends TimerTask {
 
         @Override
         public void run() {
-        	chattone.SendListCMD();
-        	buildList();
+        	if(tickTimeForList>=PERIOD_INTERVAL_LIST) {
+        		tickTimeForList=0;
+        		chattone.SendListCMD();
+        		buildList();
+        	}
+        	tickTimeForList+=PERIOD_INTERVAL;
         	String status=chattone.getStatus();
         	if(!status.equalsIgnoreCase("empty"))
         		statusLabel.setText(status);
@@ -545,7 +473,7 @@ public class cGUI extends JPanel  implements ActionListener{
     public void actionPerformed(ActionEvent e)
     { 
     	if(!isSetByProgram)
-    	{		
+    	{				
     		
     	String pulsante=e.getActionCommand();
   
@@ -559,80 +487,13 @@ public class cGUI extends JPanel  implements ActionListener{
     			chgLanguage();
     			buildComponent();
     		}
-    		/*      		else if(cb==bkgCombo)  
-       		{
-       	        loadBKGimg();
-       		   	repaint();
-
-       		}*/
-
-    		else if (cb==userCombo)
-    		{	
-
-    			chattone.setDestName(userCombo.getSelectedItem().toString());
-    			StyledDocument doc = textPane.getStyledDocument();
-    			textPane.setText("");
-    			doc.setLogicalStyle(doc.getLength(), doc.getStyle("italic"));  
-    			String [] m;
-    			String src,group,messaggio,datemsg="1900-01-01";
-    			java.util.Vector <String[]> msg=chattone.getMSGFromChat();
-    			try {	
-    				for(int i=0;i<msg.size();i++){	
-    					m=msg.elementAt(i);
-    	/*				if(m[0].contentEquals(usernameField.getText())) {
-    						doc.setLogicalStyle(doc.getLength(), doc.getStyle("bold"));
-    						doc.insertString(doc.getLength(), m[3]+"\n",doc.getStyle("bold"));
-    					}
-    					else
-    						doc.insertString(doc.getLength(),m[1]+":"+ m[3]+"\n",doc.getStyle("italic"));
-    					doc.setLogicalStyle(doc.getLength(), doc.getStyle("italic"));  */
-    					if(!datemsg.equals(m[4]))//visualizza la data se questa e' diversa rispetto al messaggio precedente
-    					{
-    						datemsg=m[4];
-    						doc.setLogicalStyle(doc.getLength(), doc.getStyle("center"));
-    						doc.insertString(doc.getLength(),m[4]+"\n",doc.getStyle("center"));
-        					doc.setLogicalStyle(doc.getLength(), doc.getStyle("italic"));      						
-    					}
-    					src=m[0];
-    					group=m[2];
-    					if(usernameField.getText().contentEquals(src))
-    					{
-    						doc.setLogicalStyle(doc.getLength(), doc.getStyle("bold"));
-    						doc.insertString(doc.getLength(), messaggio= m[3]+"\n",doc.getStyle("bold"));
-    						doc.setLogicalStyle(doc.getLength(), doc.getStyle("timeSend"));    						
-    						doc.insertString(doc.getLength(), messaggio= m[5]+"\n",doc.getStyle("timeSend"));
-    					}    						
-    					else if(group.equalsIgnoreCase("ALL"))
-    					{
-    						doc.insertString(doc.getLength(),m[0]+":"+ m[3]+"\n",doc.getStyle("italic"));
-    						doc.setLogicalStyle(doc.getLength(), doc.getStyle("timeReceive"));  
-      						doc.insertString(doc.getLength(), messaggio= m[5]+"\n",doc.getStyle("timeReceive"));
-    					}
-    					else
-    					{
-    						doc.insertString(doc.getLength(),m[3]+"\n",doc.getStyle("italic"));
-    						doc.setLogicalStyle(doc.getLength(), doc.getStyle("timeReceive"));    						
-      						doc.insertString(doc.getLength(), messaggio= m[5]+"\n",doc.getStyle("timeReceive"));
-    					}
-    					doc.setLogicalStyle(doc.getLength(), doc.getStyle("italic"));  
-    											  					
-    					
-    					//       				System.out.println(m[1]);
-    				}
-    			} catch (BadLocationException ble) {
-
-    				System.err.println("Couldn't insert initial text into text pane.");
-    			}
-
-    		}	
-       		
+     		else if (cb==userCombo)
+       			populateTextPanMsg();
+    		
        	}
        	else if(MessagesBundle.GetResourceKey(pulsante).contentEquals("label_sound"))
        	{	
-//!!!!!!!!!!!
-//!!!!!!!!!!!       		
-//!!!!!!!!!!!!!       		btnStart.setText(msgB.GetResourceValue("btn_send"));
-       		boolean s=soundCheckBox.isSelected();
+    		boolean s=soundCheckBox.isSelected();
        		if(s) {
        			soundON=s;
        			ClipSound(clipMenu,true);
@@ -644,19 +505,76 @@ public class cGUI extends JPanel  implements ActionListener{
        		
        	}			
        	else if(pulsante.contentEquals(MessagesBundle.GetResourceValue("btn_send")))
-    	{  	
-       		
- //   		loadBKGimg();    		
     		sendMsg();
-    
-      	    
-    	}		
        	else if(pulsante.contentEquals(MessagesBundle.GetResourceValue("btn_start")))
-    	{  	
-       		startChat();
-    	}		
+       	{	
+       		if(usernameField.getText().isEmpty())
+       			JOptionPane.showMessageDialog(this,msgB.GetResourceValue("warn_noname_msg"),msgB.GetResourceValue("warn_msg"),JOptionPane.INFORMATION_MESSAGE);
+       		else
+          		startChat();
+    	}
     	}
     }  
+    
+    private void populateTextPanMsg() { 
+		chattone.setDestName(userCombo.getSelectedItem().toString());
+		StyledDocument doc = textPane.getStyledDocument();
+		textPane.setText("");
+		doc.setLogicalStyle(doc.getLength(), doc.getStyle("italic"));  
+		String [] m;
+		String src,group,messaggio,datemsg="1900-01-01";
+		java.util.Vector <String[]> msg=chattone.getMSGFromChat();
+		try {	
+			for(int i=0;i<msg.size();i++){	
+				m=msg.elementAt(i);
+/*				if(m[0].contentEquals(usernameField.getText())) {
+					doc.setLogicalStyle(doc.getLength(), doc.getStyle("bold"));
+					doc.insertString(doc.getLength(), m[3]+"\n",doc.getStyle("bold"));
+				}
+				else
+					doc.insertString(doc.getLength(),m[1]+":"+ m[3]+"\n",doc.getStyle("italic"));
+				doc.setLogicalStyle(doc.getLength(), doc.getStyle("italic"));  */
+				if(!datemsg.equals(m[4]))//visualizza la data se questa e' diversa rispetto al messaggio precedente
+				{
+					datemsg=m[4];
+					doc.setLogicalStyle(doc.getLength(), doc.getStyle("center"));
+					doc.insertString(doc.getLength(),m[4]+"\n",doc.getStyle("center"));
+					doc.setLogicalStyle(doc.getLength(), doc.getStyle("italic"));      						
+				}
+				src=m[0];
+				group=m[2];
+				if(usernameField.getText().contentEquals(src))
+				{
+					doc.setLogicalStyle(doc.getLength(), doc.getStyle("bold"));
+					doc.insertString(doc.getLength(), messaggio= m[3]+"\n",doc.getStyle("bold"));
+					doc.setLogicalStyle(doc.getLength(), doc.getStyle("timeSend"));    						
+					doc.insertString(doc.getLength(), messaggio= m[5]+"\n",doc.getStyle("timeSend"));
+				}    						
+				else if(group.equalsIgnoreCase("ALL"))
+				{
+					doc.insertString(doc.getLength(),m[0]+":"+ m[3]+"\n",doc.getStyle("italic"));
+					doc.setLogicalStyle(doc.getLength(), doc.getStyle("timeReceive"));  
+						doc.insertString(doc.getLength(), messaggio= m[5]+"\n",doc.getStyle("timeReceive"));
+				}
+				else
+				{
+					doc.insertString(doc.getLength(),m[3]+"\n",doc.getStyle("italic"));
+					doc.setLogicalStyle(doc.getLength(), doc.getStyle("timeReceive"));    						
+						doc.insertString(doc.getLength(), messaggio= m[5]+"\n",doc.getStyle("timeReceive"));
+				}
+				doc.setLogicalStyle(doc.getLength(), doc.getStyle("italic"));  
+										  					
+				
+				//       				System.out.println(m[1]);
+			}
+		} catch (BadLocationException ble) {
+
+			System.err.println("Couldn't insert initial text into text pane.");
+		}
+
+	}
+
+    
     /**
 	 * Metodo per la visualizzazione dei messaggi nella chat
 	 */
@@ -664,16 +582,15 @@ public class cGUI extends JPanel  implements ActionListener{
     {
     	
     	String d=tareaIn.getText();
+    	d = d.replaceAll("\\R+", " ");
     	chattone.sendData(d);
-//0311    	tareaOut.append(d+"\n");
-   	 //0311 
-   	 StyledDocument doc = textPane.getStyledDocument();
-     doc.setLogicalStyle(doc.getLength(), doc.getStyle("bold"));
+    	StyledDocument doc = textPane.getStyledDocument();
+    	doc.setLogicalStyle(doc.getLength(), doc.getStyle("bold"));
         try {
                 doc.insertString(doc.getLength(), d+"\n",doc.getStyle("bold"));
                 doc.setLogicalStyle(doc.getLength(), doc.getStyle("timeSend"));
                 Calendar now = Calendar.getInstance();
-        		doc.insertString(doc.getLength(), now.get(Calendar.HOUR)+":"+now.get(Calendar.MINUTE)+"\n",doc.getStyle("timeSend"));                
+        		doc.insertString(doc.getLength(), now.get(Calendar.HOUR_OF_DAY)+":"+now.get(Calendar.MINUTE)+"\n",doc.getStyle("timeSend"));                
         } catch (BadLocationException ble) {
     
         System.err.println("Couldn't insert initial text into text pane.");
@@ -691,8 +608,6 @@ public class cGUI extends JPanel  implements ActionListener{
 	 */
     private void panelMenuSetStatus(boolean status)
     {
-//     	btnStart.setText(msgB.GetResourceValue("btn_start"));
-//    	boxUpper.setVisible(status);
     	boxCenter.setVisible(status);
     	boxALL.setVisible(!status);
 	}
@@ -701,16 +616,34 @@ public class cGUI extends JPanel  implements ActionListener{
 	 */
     private void chgLanguage()
     {
-    	if(languageCombo.getSelectedItem().toString().equals("IT")) 
-    		msgB.SetLanguage("it", "IT");   	
-    	else if(languageCombo.getSelectedItem().toString().equals("EN")) 
-    		msgB.SetLanguage("en", "US"); 	
-    	else if(languageCombo.getSelectedItem().toString().equals("FR")) 
-    		msgB.SetLanguage("fr", "FR");
-    	else if(languageCombo.getSelectedItem().toString().equals("ES")) 
-    		msgB.SetLanguage("es", "ES");   
-    	else if(languageCombo.getSelectedItem().toString().equals("DE")) 
-    		msgB.SetLanguage("de", "DE");	
+
+    	String language="",country="";
+    	if(languageCombo.getSelectedItem().toString().equals("IT")) {
+    		language="it";
+    		country="IT";   	
+    	}
+    	else if(languageCombo.getSelectedItem().toString().equals("EN")) {
+    		language="en";
+    		country="US"; 	
+    	}
+    	else if(languageCombo.getSelectedItem().toString().equals("FR")) {
+    		language="fr";
+    		country="FR";
+    	}
+    	else if(languageCombo.getSelectedItem().toString().equals("ES")) {
+    		language="es";
+    		country="ES";   
+    	}
+    	else if(languageCombo.getSelectedItem().toString().equals("DE")) {
+    		language="de";
+    		country="DE";
+    	}
+    	msgB.SetLanguage(language,country);
+    	if(chaton) {
+    		chattone.setLanguage(language,country);
+    		chattone.manageStatus("hello_msg");
+    	}
+  
     } 
     /**
 	 * Metodo che imposta i componenti del menu' in base alla lingua scelta
@@ -719,11 +652,7 @@ public class cGUI extends JPanel  implements ActionListener{
     {
     	isSetByProgram=true;
     	int i;
- /*   	 int itemCount = bkgCombo.getItemCount();
-    	 
-        for( i=0;i<itemCount;i++){
-        	bkgCombo.removeItemAt(0);
-         }*/
+
         String lan;
         if(languageCombo.getSelectedItem()!=null)
         	lan=languageCombo.getSelectedItem().toString();
@@ -735,15 +664,6 @@ public class cGUI extends JPanel  implements ActionListener{
         	languageCombo.removeItemAt(0);
          }
     
-  //      remove(panHorse);        
-        
-/*        bkgCombo.addItem(msgB.GetResourceValue("bkg_sand"));
-        bkgCombo.addItem(msgB.GetResourceValue("bkg_field"));
-        bkgCombo.addItem(msgB.GetResourceValue("bkg_green"));
-        bkgCombo.addItem(msgB.GetResourceValue("bkg_rock")); 
-        bkgCombo.addItem(msgB.GetResourceValue("bkg_ice"));
-        bkgCombo.addItem(msgB.GetResourceValue("bkg_railroad")); 
-        */
         languageCombo.addItem("IT");
         languageCombo.addItem("EN");
         languageCombo.addItem("FR");
@@ -764,20 +684,14 @@ public class cGUI extends JPanel  implements ActionListener{
         else
         		languageCombo.setSelectedIndex(0);
      	        
- //        panHorse.add(atmoLabel);       
-//       panHorse.add(atmoCombo);
-        
-  //    buildList();
-        
-//        panHorse.add(percorsoLabel);       
-//        panHorse.add(bkgCombo)
+
         if(chaton)
           	btnStart.setText(msgB.GetResourceValue("btn_send"));
         else
           	btnStart.setText(msgB.GetResourceValue("btn_start"));
+        
         usernameLabel.setText(msgB.GetResourceValue("label_username"));
     	addressLabel.setText(msgB.GetResourceValue("label_address"));
-//    	percorsoLabel.setText(msgB.GetResourceValue("label_place"));
     	languageLabel.setText(msgB.GetResourceValue("label_language"));
     	soundCheckBox.setText(msgB.GetResourceValue("label_sound"));
 
@@ -805,15 +719,7 @@ public class cGUI extends JPanel  implements ActionListener{
     	if (v.elementAt(i).equalsIgnoreCase(sel))
         		userCombo.setSelectedIndex(i);
     }    
-/*    
-    int naddress=chattone.getThreadClient().getList().size();   
-    for(int i=0;i<naddress;i++) {
-    	userCombo.addItem(chattone.getThreadClient().getList().elementAt(i));
-    	if (chattone.getThreadClient().getList().elementAt(i).equalsIgnoreCase(sel))
-        		userCombo.setSelectedIndex(i);
-    }
-    */
-   // userCombo.setSelectedIndex(userCombo.getItemCount()-1);
+
 	isSetByProgram=false;
     } 
 

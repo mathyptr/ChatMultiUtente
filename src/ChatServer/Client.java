@@ -61,7 +61,7 @@ public class Client {
 			clientSocket = new Socket(serverName, serverPort);// viene creato un socket dato il nome del server e la sua porta			
 			inputServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			outServer = new PrintStream(clientSocket.getOutputStream(), true);
-			manageStatus("Connessione stabilita");
+			manageStatus("client_connectOK");
 		} catch (IOException e) {
 			System.out.println("Host non riconosciuto");
 		}
@@ -146,6 +146,12 @@ public class Client {
 		hello(); // prima di poter inviare i dati il client deve dire il proprio nome
 		
 	}
+	
+	public void quit() {
+		
+		sendData( command.getQUIT_CMD());		
+	}
+	
 	/**
 	 * Metodo per l'invio del comando di richiesta degli utenti connessi
 	 * 
@@ -184,10 +190,11 @@ public class Client {
 	 */
 	public void manageStatus(String s)
 	{
+		 String msg=msgB.GetResourceValue(s);
 		 if(type.equalsIgnoreCase("cmd"))
-			 System.out.println(s);
+			 System.out.println(msg);
 		 else
-			 SR.pushStatusMSG(s);
+			 SR.pushStatusMSG(msg);
 	}
 	/**
 	 * metodo che permette notificare nella barra di stato i nuovi messaggi di altre chat 

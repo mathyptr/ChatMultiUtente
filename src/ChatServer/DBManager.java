@@ -11,7 +11,7 @@ import java.sql.Statement;
  * @author Patrissi Mathilde
  */
 public class DBManager {
-    String url = "jdbc:sqlite:.//db//chatDB.sqlite"; 
+	String url = "jdbc:sqlite:.//db//chatDB.sqlite"; 
     /**
      * Metodo per la connessione al database
      *

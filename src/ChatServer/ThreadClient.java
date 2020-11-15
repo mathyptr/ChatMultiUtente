@@ -101,7 +101,7 @@ public ThreadClient (BufferedReader inputServer, String clientName, SharedRegion
 			System.out.println(command.getDataCMD(clientData));
 			break;
 		case 1: 
-			System.out.println(command.getDataCMD(clientData));
+			sendInfoInStatus(command.getDataCMD(clientData));
 			endChat = true; //viene settata la variabile a true poiche' l'utente ha digitato il comando di uscita
 			break;
 		case 2: 
@@ -113,6 +113,9 @@ public ThreadClient (BufferedReader inputServer, String clientName, SharedRegion
 			break;	
 		case 4: //comando list
 			ListCMD(clientData);
+			break;
+		case 5: //risposta di stato
+			sendInfoInStatus(command.getDataCMD(clientData));
 			break;
 			
 		default : 
@@ -148,7 +151,7 @@ public ThreadClient (BufferedReader inputServer, String clientName, SharedRegion
 			 else
 				 System.out.println(mes);
 			 Calendar now = Calendar.getInstance();
-			 System.out.println(now.get(Calendar.HOUR)+":"+now.get(Calendar.MINUTE)+"\n");                		 
+			 System.out.println(now.get(Calendar.HOUR_OF_DAY)+":"+now.get(Calendar.MINUTE)+"\n");                		 
 //11112020			 System.out.println(src+": "+mes);
 		 }
 		 else
